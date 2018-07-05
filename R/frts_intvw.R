@@ -128,6 +128,7 @@ frts_intvw<- function(m.intvw, y.intvw, m.wmn,
 
 
 
+
 summary.frts_intvw <- function(x, level, ...){
 
   val <- c()
