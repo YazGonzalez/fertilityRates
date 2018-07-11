@@ -1,3 +1,39 @@
+#' Apply fertility rates methodology for year of interview
+#'
+#' Applies a given fertility rates methodology rates
+#' case-by-case to a data set and returns another data set
+#' with the estimates by observation.
+#'
+#' @param m.intvw A numeric or a vector which indicates the month in which the mother were interviewed.
+#' @param y.intvw A numeric which indicate the year in which the mother were interviewed.
+#' @param m.wmn A vector specifying the woman’s month of birth (mother or not mother).
+#' @param y.wmn A vector specifying the woman’s year of birth (mother or not mother).
+#' @param m.child A vector specifying the child’s month of birth (if the woman doesn't have child, NA).
+#' @param y.child A vector specifying the child’s year of birth (if the woman doesn't have children, NA).
+#' @param children A vector which indicate the number of children.
+#' @param child.dummy A vector which indicate 0 if the woman doesn't have a child or 1 if the woman has a child.
+#' @param wmn.dummy A vector which indicate TRUE if the woman isn't duplicate or FALSE if the woman is duplicate.
+#' @param id.wmn A vector wich indicate the woman's identification.
+#' @param ids A vector specifying cluster ids from largest level to smallest level.
+#' @param strata A vector specifying strata.
+#' @param weights A vetor pecifying sampling weights as an alternative to prob (1/weights).
+#' @param data A data frame containing the above variables.
+#'
+#' @return An object of class frts_intvw containing a data.frame and a list.
+#'
+#' @examples
+#'
+#' ## Information from ENADID 2014, INEGI
+#'
+#' mg1 <- frts_intvw(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, m.child=FEC_HIJ_M,
+#' y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO,
+#' data = enadid_2014, weights = FACTOR)
+#'
+#' summary(mg1, level = 0.9)
+#'
+#' @export
+#'
+
 frts_intvw<- function(m.intvw, y.intvw, m.wmn,
                       y.wmn, m.child, y.child, children,
                       child.dummy, wmn.dummy, id.wmn, ids,
@@ -51,7 +87,8 @@ frts_intvw<- function(m.intvw, y.intvw, m.wmn,
       data <- data.frame(matrix(ncol =(49- 15)+1, nrow = length(database$age.wmn)))
       colnames(data) <- nom
       for(j in 1:((49 - 15)+1)){
-        data[,j]<- auxiliary(j+15-1,database$age.wmn,database$age2.wmn,database$expo1,database$expo2,database$expo3)
+        data[,j]<- auxiliary(j+15-1, database$age.wmn, database$age2.wmn, database$expo1,
+                             database$expo2, database$expo3)
       }
 
 
@@ -123,61 +160,4 @@ frts_intvw<- function(m.intvw, y.intvw, m.wmn,
 
 }
 
-
-
-
-summary.frts_intvw <- function(x, level, ...){
-
-  val <- c()
-  i_ci <- c()
-  u_ci <- c()
-  variance <- c()
-  for (i in 15:49) {
-    temp <- paste('exposition_',as.character(i),sep = '')
-    rate <- svyratio(~ child.dummy * (y.child == y.intvw & age.mother == i),
-                     ~ x$df[,grep(temp, names(x$df), value=TRUE)], x$ds, na.rm=TRUE)
-    ci <- confint(rate, level = level, df=degf(x$ds))
-    val <- c(val, rate$ratio[2])
-    i_ci <- c(i_ci, ci[2])
-    u_ci <- c(u_ci, ci[4])
-    variance <- c(variance,rate$var[2])
-
-  }
-  as_fr <- data.frame(val, i_ci, u_ci, variance)
-  names(as_fr)<-c('as_fr','l_ci','u_ci','var')
-  row.names(as_fr) <- 15:49
-
-
-  rate=apply(as_fr,2,sum)[1]
-  se=sqrt(apply(as_fr,2,sum)[4])
-  a <- (1 - level)
-  t_fr <- c(rate, rate + qt(a/2, df=degf(x$ds)) * se, rate + qt(1-a/2, df=degf(x$ds)) * se)
-  names(t_fr)<-c('t_fr','l_ci','u_ci')
-
-
-  val2 <- c()
-  i_ci2 <- c()
-  u_ci2 <- c()
-  variance2 <- c()
-  for (i in levels(x$df$age.group)[-c(1,9)]) {
-    temp <- paste('expo', i, sep = '')
-    rate <- svyratio(~ child.dummy * (y.child == y.intvw & age.group == i),
-                     ~ x$df[,grep(temp, names(x$df), value=TRUE)], x$ds, na.rm=TRUE)
-    ci <- confint(rate, level = level, df=degf(x$ds))
-    val2 <- c(val2, rate$ratio[2])
-    i_ci2 <- c(i_ci2, ci[2])
-    u_ci2 <- c(u_ci2, ci[4])
-    variance2 <- c(variance2,rate$var[2])
-
-  }
-  ag_fr <- data.frame(val2, i_ci2, u_ci2, variance2)
-  names(ag_fr)<-c('ag_fr','l_ci','u_ci','var')
-  row.names(ag_fr) <- c('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49')
-
-
-
-  value <- list(as_fr = as_fr, t_fr = t_fr, ag_fr = ag_fr)
-  value
-
-}
 

@@ -1,3 +1,22 @@
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+#'
+
+
+
+
 frts_yrly<- function(y.ref, m.wmn,
                       y.wmn, m.child, y.child, children,
                       child.dummy, wmn.dummy, id.wmn, ids,
@@ -121,63 +140,6 @@ frts_yrly<- function(y.ref, m.wmn,
 
 
 
-
-
-
-summary.frts_yrly <- function(x, y.ref, level, ...){
-
-  val <- c()
-  i_ci <- c()
-  u_ci <- c()
-  variance <- c()
-  for (i in 15:49) {
-    temp <- paste('exposition_',as.character(i),sep = '')
-    rate <- svyratio(~ child.dummy * (y.child == y.ref & age.mother == i),
-                     ~ x$df[,grep(temp, names(x$df), value=TRUE)], x$ds, na.rm=TRUE)
-    ci <- confint(rate, level = level, df=degf(x$ds))
-    val <- c(val, rate$ratio[2])
-    i_ci <- c(i_ci, ci[2])
-    u_ci <- c(u_ci, ci[4])
-    variance <- c(variance,rate$var[2])
-
-  }
-  as_fr <- data.frame(val, i_ci, u_ci, variance)
-  names(as_fr)<-c('as_fr','l_ci','u_ci','var')
-  row.names(as_fr) <- 15:49
-
-
-  rate=apply(as_fr,2,sum)[1]
-  se=sqrt(apply(as_fr,2,sum)[4])
-  a <- (1 - level)
-  t_fr <- c(rate, rate + qt(a/2, df=degf(x$ds)) * se, rate + qt(1-a/2, df=degf(x$ds)) * se)
-  names(t_fr)<-c('t_fr','l_ci','u_ci')
-
-
-  val2 <- c()
-  i_ci2 <- c()
-  u_ci2 <- c()
-  variance2 <- c()
-  for (i in levels(x$df$age.group)[-c(1,9)]) {
-    temp <- paste('expo', i, sep = '')
-    rate <- svyratio(~ child.dummy * (y.child == y.ref & age.group == i),
-                     ~ x$df[,grep(temp, names(x$df), value=TRUE)], x$ds, na.rm=TRUE)
-    ci <- confint(rate, level = level, df=degf(x$ds))
-    val2 <- c(val2, rate$ratio[2])
-    i_ci2 <- c(i_ci2, ci[2])
-    u_ci2 <- c(u_ci2, ci[4])
-    variance2 <- c(variance2,rate$var[2])
-
-  }
-  ag_fr <- data.frame(val2, i_ci2, u_ci2, variance2)
-  names(ag_fr)<-c('ag_fr','l_ci','u_ci','var')
-  row.names(ag_fr) <- c('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49')
-
-
-
-  value <- list(as_fr = as_fr, t_fr = t_fr, ag_fr = ag_fr)
-  value
-
-}
 
 
 
