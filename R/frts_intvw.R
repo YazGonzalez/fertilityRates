@@ -159,5 +159,3 @@ frts_intvw<- function(m.intvw, y.intvw, m.wmn,
   }
 
 }
-
-

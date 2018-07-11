@@ -54,9 +54,8 @@ summary.frts_intvw <- function(x, level, ...){
 }
 
 
-
 #' @export
-summary.frts_yrly <- function(x, y.ref, level, ...){
+summary.frts_yrly <- function(x, level, ...){
 
   val <- c()
   i_ci <- c()
@@ -65,7 +64,7 @@ summary.frts_yrly <- function(x, y.ref, level, ...){
 
   for (i in 15:49) {
     temp <- paste('exposition_',as.character(i),sep = '')
-    rate <- svyratio(~ child.dummy * (y.child == y.ref & age.mother == i),
+    rate <- svyratio(~ child.dummy * (y.child == x$year & age.mother == i),
                      ~ x$df[,grep(temp, names(x$df), value=TRUE)], x$ds, na.rm=TRUE)
     ci <- confint(rate, level = level, df=degf(x$ds))
     val <- c(val, rate$ratio[2])
@@ -93,7 +92,7 @@ summary.frts_yrly <- function(x, y.ref, level, ...){
 
   for (i in levels(x$df$age.group)[-c(1,9)]) {
     temp <- paste('expo', i, sep = '')
-    rate <- svyratio(~ child.dummy * (y.child == y.ref & age.group == i),
+    rate <- svyratio(~ child.dummy * (y.child == x$year & age.group == i),
                      ~ x$df[,grep(temp, names(x$df), value=TRUE)], x$ds, na.rm=TRUE)
     ci <- confint(rate, level = level, df=degf(x$ds))
     val2 <- c(val2, rate$ratio[2])
@@ -172,6 +171,7 @@ summary.frts_3yrs <- function(x,  level, ...){
   value
 
 }
+
 
 
 #' @export

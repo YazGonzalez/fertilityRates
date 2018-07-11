@@ -1,21 +1,37 @@
+#' Apply fertility rates methodology for last complete years up to five years
 #'
+#' Applies a given fertility rates methodology rates
+#' case-by-case to a data set and returns another data set
+#' with the estimates by observation.
 #'
+#' @param y.ref A numeric which indicate the reference year. It must be between last five years above interview.
+#' @param m.wmn A vector specifying the woman’s month of birth (mother or not mother).
+#' @param y.wmn A vector specifying the woman’s year of birth (mother or not mother).
+#' @param m.child A vector specifying the child’s month of birth (if the woman doesn't have child, NA).
+#' @param y.child A vector specifying the child’s year of birth (if the woman doesn't have children, NA).
+#' @param children A vector which indicate the number of children.
+#' @param child.dummy A vector which indicate 0 if the woman doesn't have a child or 1 if the woman has a child.
+#' @param wmn.dummy A vector which indicate TRUE if the woman isn't duplicate or FALSE if the woman is duplicate.
+#' @param id.wmn A vector wich indicate the woman's identification.
+#' @param ids A vector specifying cluster ids from largest level to smallest level.
+#' @param strata A vector specifying strata.
+#' @param weights A vetor pecifying sampling weights as an alternative to prob (1/weights).
+#' @param data A data frame containing the above variables.
 #'
+#' @return An object of class frts_yrly containing a data.frame, a list and a numeric.
 #'
+#' @examples
 #'
+#' ## Information from ENADID 2014, INEGI
 #'
+#' mg2 <- frts_yrly(y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, m.child=FEC_HIJ_M,
+#' y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
+#' ids=UPM, strata=ESTRATO,data = base, weights = FACTOR)
 #'
+#' summary(mg2, level = 0.9)
 #'
+#' @export
 #'
-#'
-#'
-#'
-#'
-#'
-#'
-
-
-
 
 frts_yrly<- function(y.ref, m.wmn,
                       y.wmn, m.child, y.child, children,
@@ -120,7 +136,7 @@ frts_yrly<- function(y.ref, m.wmn,
                       weights = ~weights,
                       data = database, nest=TRUE) #JUST NEST
 
-      value <- list(df = database, ds = ds)
+      value <- list(df = database, ds = ds, year = y.ref)
 
       attr(value, 'class') <- 'frts_yrly'
       value
@@ -136,11 +152,3 @@ frts_yrly<- function(y.ref, m.wmn,
   }
 
 }
-
-
-
-
-
-
-
-

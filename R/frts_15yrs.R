@@ -1,3 +1,5 @@
+
+
 frts_15yrs<- function(y.intvw, m.wmn,
                      y.wmn, m.child, y.child, children,
                      child.dummy, wmn.dummy, id.wmn,
@@ -135,9 +137,3 @@ frts_15yrs<- function(y.intvw, m.wmn,
 
 }
   }
-
-
-
-
-
-
