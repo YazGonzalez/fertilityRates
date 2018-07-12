@@ -184,8 +184,3 @@ frts_3yrs<- function(y.first, y.second, y.third, m.wmn,
   }
 
 }
-
-
-
-
-
