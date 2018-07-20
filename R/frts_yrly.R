@@ -39,6 +39,7 @@ frts_yrly<- function(y.ref, m.wmn,
                       strata, weights, data, ...){
   if(is.data.frame(data)){
     if (is.element("survey", installed.packages()[,1])) {
+      if (!("package:survey" %in% search())) library ("survey")
       attach(data)
       database <- data.frame(m.wmn, y.wmn, #PENDIENTE
                              m.child, y.child,

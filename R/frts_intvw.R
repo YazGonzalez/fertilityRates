@@ -40,6 +40,7 @@ frts_intvw<- function(m.intvw, y.intvw, m.wmn,
                       strata, weights, data, ...){
   if(is.data.frame(data)){
     if (is.element("survey", installed.packages()[,1])) {
+      if (!("package:survey" %in% search())) library ("survey")
       attach(data)
       database <- data.frame(m.intvw, y.intvw,
                              m.wmn, y.wmn,

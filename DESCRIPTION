@@ -8,9 +8,9 @@ Description: This is an R package to do point estimates and confidence
     intervals of age-specific fertility rates by single years of age and grouped year of age,
     and total fertility rates, for annual or three-year periods that fall 
     within five years prior to the date of survey. In addition, point estimates 
-    of the aforementioned fertility measures for the fifteen-year period prior to the survey. 
+    of the aforementioned fertility measures for the last fifteen-year prior to the survey.
 License: What license is it under?
-URL: https://github.com/YazGonzalez/fertilityRates
+URL: https://gitlab.com/YazGonzalez/fertilityRates
 Encoding: UTF-8
 LazyData: true
 Imports: survey

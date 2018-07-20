@@ -1,5 +1,36 @@
-
-
+#' Apply fertility rates methodology for last fifteen-years to annual periods
+#'
+#' Applies a given fertility rates methodology rates
+#' case-by-case to a data set and returns a list with the estimates by year.
+#'
+#' @param y.intvw A numeric which indicate the year in which the mother were interviewed.
+#' @param m.wmn A vector specifying the woman’s month of birth (mother or not mother).
+#' @param y.wmn A vector specifying the woman’s year of birth (mother or not mother).
+#' @param m.child A vector specifying the child’s month of birth (if the woman doesn't have child, NA).
+#' @param y.child A vector specifying the child’s year of birth (if the woman doesn't have children, NA).
+#' @param children A vector which indicate the number of children.
+#' @param child.dummy A vector which indicate 0 if the woman doesn't have a child or 1 if the woman has a child.
+#' @param wmn.dummy A vector which indicate TRUE if the woman isn't duplicate or FALSE if the woman is duplicate.
+#' @param id.wmn A vector wich indicate the woman's identification.
+#' @param ids A vector specifying cluster ids from largest level to smallest level.
+#' @param strata A vector specifying strata.
+#' @param weights A vetor pecifying sampling weights as an alternative to prob (1/weights).
+#' @param data A data frame containing the above variables.
+#'
+#' @return An object of class frts_15yrs containing four arrays and a numeric.
+#'
+#' @examples
+#'
+#' ## Information from ENADID 2014, INEGI
+#'
+#' mg4 <- frts_15yrs(y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, m.child=FEC_HIJ_M,
+#' y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
+#' data = enadid_2014, weights = FACTOR)
+#'
+#' summary(mg4)
+#'
+#' @export
+#'
 frts_15yrs<- function(y.intvw, m.wmn,
                      y.wmn, m.child, y.child, children,
                      child.dummy, wmn.dummy, id.wmn,
