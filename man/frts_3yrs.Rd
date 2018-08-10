@@ -4,8 +4,8 @@
 \alias{frts_3yrs}
 \title{Apply fertility rates methodology for last five years to three-year periods}
 \usage{
-frts_3yrs(y.first, y.second, y.third, m.wmn, y.wmn, m.child, y.child, children,
-  child.dummy, wmn.dummy, id.wmn, ids, strata, weights, data)
+frts_3yrs(y.first, y.second, y.third, m.wmn, y.wmn, m.child, y.child,
+  children, child.dummy, wmn.dummy, id.wmn, ids, strata, weights, data)
 }
 \arguments{
 \item{y.first}{A numeric which indicate the first year retrospectively of three-year periods.}
