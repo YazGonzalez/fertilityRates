@@ -8,10 +8,12 @@ Description: This is an R package to do point estimates and confidence
     intervals of age-specific fertility rates by single years of age and grouped year of age,
     and total fertility rates, for annual or three-year periods that fall 
     within five years prior to the date of survey. In addition, point estimates 
-    of the aforementioned fertility measures for the last fifteen-year prior to the survey.
-License: What license is it under?
+    of the aforementioned fertility measures for the last fifteen-year prior to the survey. 
+    The fertilityRates package uses Tom A Moultrie's methodology "Direct estimation of fertility 
+    from survey data containing birth histories." in Tools for Demographic Estimation.
+License: MIT + file LICENSE
 URL: https://gitlab.com/YazGonzalez/fertilityRates
 Encoding: UTF-8
 LazyData: true
 Imports: survey
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

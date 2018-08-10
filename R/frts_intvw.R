@@ -37,7 +37,7 @@
 frts_intvw<- function(m.intvw, y.intvw, m.wmn,
                       y.wmn, m.child, y.child, children,
                       child.dummy, wmn.dummy, id.wmn, ids,
-                      strata, weights, data, ...){
+                      strata, weights, data){
   if(is.data.frame(data)){
     if (is.element("survey", installed.packages()[,1])) {
       if (!("package:survey" %in% search())) library ("survey")

@@ -5,7 +5,7 @@
 \title{Apply fertility rates methodology for last complete years up to five years}
 \usage{
 frts_yrly(y.ref, m.wmn, y.wmn, m.child, y.child, children, child.dummy,
-  wmn.dummy, id.wmn, ids, strata, weights, data, ...)
+  wmn.dummy, id.wmn, ids, strata, weights, data)
 }
 \arguments{
 \item{y.ref}{A numeric which indicate the reference year. It must be between last five years above interview.}
@@ -48,7 +48,7 @@ with the estimates by observation.
 
 mg2 <- frts_yrly(y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, m.child=FEC_HIJ_M,
 y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
-ids=UPM, strata=ESTRATO,data = base, weights = FACTOR)
+ids=UPM, strata=ESTRATO,data = enadid_2014, weights = FACTOR)
 
 summary(mg2, level = 0.9)
 

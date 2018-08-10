@@ -5,7 +5,7 @@
 \title{Apply fertility rates methodology for last fifteen-years to annual periods}
 \usage{
 frts_15yrs(y.intvw, m.wmn, y.wmn, m.child, y.child, children, child.dummy,
-  wmn.dummy, id.wmn, weights, data, ...)
+  wmn.dummy, id.wmn, weights, data)
 }
 \arguments{
 \item{y.intvw}{A numeric which indicate the year in which the mother were interviewed.}

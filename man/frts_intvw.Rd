@@ -5,7 +5,7 @@
 \title{Apply fertility rates methodology for year of interview}
 \usage{
 frts_intvw(m.intvw, y.intvw, m.wmn, y.wmn, m.child, y.child, children,
-  child.dummy, wmn.dummy, id.wmn, ids, strata, weights, data, ...)
+  child.dummy, wmn.dummy, id.wmn, ids, strata, weights, data)
 }
 \arguments{
 \item{m.intvw}{A numeric or a vector which indicates the month in which the mother were interviewed.}

@@ -1,0 +1,65 @@
+[33mcommit 99e5fc2bc8afa55475424b560bf3708b9de710e0[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Yazmin González <ybgm@outlook.com>
+Date:   Fri Jul 20 20:23:38 2018 -0500
+
+    Update namespace. Delete the first and then devtools::document().
+
+[33mcommit 6b8617ac9b907bc4a3ed2ee33a9d9bd4b2313213[m
+Author: Yazmin González <ybgm@outlook.com>
+Date:   Fri Jul 20 15:30:52 2018 -0500
+
+    .
+
+[33mcommit 435948009455b805ff264a378ccbb033816d86f0[m
+Author: Yazmin González <ybgm@outlook.com>
+Date:   Fri Jul 20 15:17:04 2018 -0500
+
+    Documentacion.
+
+[33mcommit c6622efb078f1ad5feaf204e1b33cc7540757f32[m
+Author: Yazmin González <ybgm@outlook.com>
+Date:   Fri Jul 13 19:19:17 2018 -0500
+
+    Show data-raw?!
+
+[33mcommit 66d1b81a147ae25b218a6d9bd60e77003ea74756[m
+Author: Yazmin González <ybgm@outlook.com>
+Date:   Wed Jul 11 19:03:48 2018 -0500
+
+    Test.
+
+[33mcommit c89ca2e10cb47050cef8f257564744f1cb0b0e9f[m
+Author: Yazmin González <ybgm@outlook.com>
+Date:   Wed Jul 11 18:42:53 2018 -0500
+
+    More documentation.
+
+[33mcommit f78a36c71ae44ad4899592b0f1872bffbeb66ab9[m
+Author: Yazmin González <ybgm@outlook.com>
+Date:   Wed Jul 11 17:25:13 2018 -0500
+
+    Some documentation and changes on names of values (summary)
+
+[33mcommit 428ca73948cb6b15dd0d9fd8e9e5d41c3467b29a[m
+Author: Yazmin González <ybgm@outlook.com>
+Date:   Thu Jul 5 17:45:09 2018 -0500
+
+    Otra prueba de git
+
+[33mcommit d986199f8a9b6c5dc7d08c899d96f8e551ff0f31[m
+Author: Yazmin González <ybgm@outlook.com>
+Date:   Thu Jul 5 17:11:20 2018 -0500
+
+    Sigo probando
+
+[33mcommit 53a9340ca8574a80a61f3f7671fb50040138d080[m
+Author: Yazmin González <ybgm@outlook.com>
+Date:   Thu Jul 5 16:18:39 2018 -0500
+
+    Prueba commit
+
+[33mcommit ff95400e35271ee9c1f136f4c22a1b482ecc180c[m
+Author: Yazmin González <ybgm@outlook.com>
+Date:   Thu Jul 5 15:42:03 2018 -0500
+
+    The first commit.

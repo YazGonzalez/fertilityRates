@@ -5,7 +5,7 @@
 \title{Apply fertility rates methodology for last five years to three-year periods}
 \usage{
 frts_3yrs(y.first, y.second, y.third, m.wmn, y.wmn, m.child, y.child, children,
-  child.dummy, wmn.dummy, id.wmn, ids, strata, weights, data, ...)
+  child.dummy, wmn.dummy, id.wmn, ids, strata, weights, data)
 }
 \arguments{
 \item{y.first}{A numeric which indicate the first year retrospectively of three-year periods.}
@@ -54,7 +54,7 @@ with the estimates by observation.
 
 mg3 <- frts_3yrs(y.first=2013, y.second=2012, y.third=2011, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A,
 m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER,
-id.wmn=ID_1, ids=UPM, strata=ESTRATO, data = base, weights = FACTOR)
+id.wmn=ID_1, ids=UPM, strata=ESTRATO, data = enadid_2014, weights = FACTOR)
 
 summary(mg3, level = 0.9)
 

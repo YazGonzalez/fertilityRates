@@ -26,7 +26,7 @@
 #'
 #' mg2 <- frts_yrly(y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, m.child=FEC_HIJ_M,
 #' y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
-#' ids=UPM, strata=ESTRATO,data = base, weights = FACTOR)
+#' ids=UPM, strata=ESTRATO,data = enadid_2014, weights = FACTOR)
 #'
 #' summary(mg2, level = 0.9)
 #'
@@ -36,7 +36,7 @@
 frts_yrly<- function(y.ref, m.wmn,
                       y.wmn, m.child, y.child, children,
                       child.dummy, wmn.dummy, id.wmn, ids,
-                      strata, weights, data, ...){
+                      strata, weights, data){
   if(is.data.frame(data)){
     if (is.element("survey", installed.packages()[,1])) {
       if (!("package:survey" %in% search())) library ("survey")
