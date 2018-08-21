@@ -65,7 +65,6 @@ frts_3yrs<- function(y.first, y.second, y.third, m.wmn,
       database$age6.wmn <- age6.wmn
 
 
-
       database$expo1 <- 0
       database$expo2 <- 0
 
@@ -81,29 +80,14 @@ frts_3yrs<- function(y.first, y.second, y.third, m.wmn,
 
 
 
-      auxiliary <- function(age, age.wmn, age2.wmn, age3.wmn, age4.wmn,
-                            age5.wmn, age6.wmn, exposition1, exposition2){
+      auxiliary <- function(age, age.wmn, age2.wmn, exposition1, exposition2){
         expo1 <- rep(0,length(exposition1))
-        aux <- grep(age, age.wmn, value=FALSE)
+        aux<-grep(age, age.wmn, value=FALSE)
         expo1[aux] <- exposition1[aux]
-        aux2 <- grep(age, age2.wmn, value=FALSE)
+        aux2<-grep(age, age2.wmn, value=FALSE)
         expo1[aux2] <- exposition2[aux2]
 
-        expo2 <- rep(0,length(exposition1))
-        aux3 <- grep(age, age3.wmn, value=FALSE)
-        expo1[aux3] <- exposition1[aux3]
-        aux4 <- grep(age, age4.wmn, value=FALSE)
-        expo1[aux4] <- exposition2[aux4]
-
-        expo3 <- rep(0,length(exposition1))
-        aux5 <- grep(age, age5.wmn, value=FALSE)
-        expo1[aux5] <- exposition1[aux5]
-        aux6 <- grep(age, age6.wmn, value=FALSE)
-        expo1[aux6] <- exposition2[aux6]
-
-        expo <- expo1 + expo2 + expo3
-
-        return(expo)
+        return(expo1)
       }
 
 
@@ -112,8 +96,14 @@ frts_3yrs<- function(y.first, y.second, y.third, m.wmn,
       data <- data.frame(matrix(ncol =(max(database$age2.wmn)- min(database$age.wmn))+1, nrow = length(database$age.wmn)))
       colnames(data) <- nom
       for(j in 1:((max(database$age2.wmn)- min(database$age.wmn))+1)){
-        data[,j]<- auxiliary(j+min(database$age.wmn)-1,database$age.wmn,database$age2.wmn, database$age3.wmn,database$age4.wmn, database$age5.wmn,database$age6.wmn,database$expo1,database$expo2)
+        data[,j]<- auxiliary(j+min(database$age.wmn)-1,database$age.wmn,database$age2.wmn,database$expo1,database$expo2)
       }
+
+      temp <- rep(0, nrow(data))
+      data2 <- cbind(data[ ,-1], temp)
+      data3 <- cbind(data2[ ,-1], temp)
+      data <- data + data2 + data3
+
 
       database$expo1 <- NULL
       database$expo2 <- NULL
