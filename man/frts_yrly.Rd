@@ -4,15 +4,21 @@
 \alias{frts_yrly}
 \title{Apply fertility rates methodology for last complete years up to five years}
 \usage{
-frts_yrly(y.ref, m.wmn, y.wmn, m.child, y.child, children, child.dummy,
-  wmn.dummy, id.wmn, ids, strata, weights, data)
+frts_yrly(m.intvw, y.intvw, y.ref, m.wmn, y.wmn, age.wmn, m.child, y.child,
+  children, child.dummy, wmn.dummy, id.wmn, ids, strata, weights, data)
 }
 \arguments{
+\item{m.intvw}{A numeric or a vector which indicates the month in which the woman were interviewed.}
+
+\item{y.intvw}{A numeric which indicate the year in which the woman were interviewed.}
+
 \item{y.ref}{A numeric which indicate the reference year. It must be between last five years above interview.}
 
 \item{m.wmn}{A vector specifying the woman’s month of birth (mother or not mother).}
 
 \item{y.wmn}{A vector specifying the woman’s year of birth (mother or not mother).}
+
+\item{age.wmn}{A vector specifying the woman's age at the time of the interview (mother or not mother).}
 
 \item{m.child}{A vector specifying the child’s month of birth (if the woman doesn't have child, NA).}
 
@@ -46,7 +52,7 @@ with the estimates by observation.
 
 ## Information from ENADID 2014, INEGI
 
-mg2 <- frts_yrly(y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, m.child=FEC_HIJ_M,
+mg2 <- frts_yrly(m.intvw=ENTREV_M, y.intvw=2014, y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDADD, m.child=FEC_HIJ_M,
 y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
 ids=UPM, strata=ESTRATO,data = enadid_2014, weights = FACTOR)
 

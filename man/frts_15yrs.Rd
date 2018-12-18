@@ -4,15 +4,19 @@
 \alias{frts_15yrs}
 \title{Apply fertility rates methodology for last fifteen-years to annual periods}
 \usage{
-frts_15yrs(y.intvw, m.wmn, y.wmn, m.child, y.child, children, child.dummy,
-  wmn.dummy, id.wmn, weights, data)
+frts_15yrs(m.intvw, y.intvw, m.wmn, y.wmn, age.wmn, m.child, y.child,
+  children, child.dummy, wmn.dummy, id.wmn, weights, data)
 }
 \arguments{
-\item{y.intvw}{A numeric which indicate the year in which the mother were interviewed.}
+\item{m.intvw}{A numeric or a vector which indicates the month in which the woman were interviewed.}
+
+\item{y.intvw}{A numeric which indicate the year in which the woman were interviewed.}
 
 \item{m.wmn}{A vector specifying the woman’s month of birth (mother or not mother).}
 
 \item{y.wmn}{A vector specifying the woman’s year of birth (mother or not mother).}
+
+\item{age.wmn}{A vector specifying the woman's age at the time of the interview (mother or not mother).}
 
 \item{m.child}{A vector specifying the child’s month of birth (if the woman doesn't have child, NA).}
 
@@ -45,8 +49,8 @@ case-by-case to a data set and returns a list with the estimates by year.
 
 ## Information from ENADID 2014, INEGI
 
-mg4 <- frts_15yrs(y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, m.child=FEC_HIJ_M,
-y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
+mg4 <- frts_15yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDADD,
+m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
 data = enadid_2014, weights = FACTOR)
 
 summary(mg4)

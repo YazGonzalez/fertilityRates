@@ -38,7 +38,7 @@ summary.frts_intvw <- function(x, level){
     variance <- c(variance,rate$var[2])
   }
 
-  as_fr <- data.frame(round(val, 3), round(i_ci, 3), round(u_ci, 3), variance)
+  as_fr <- data.frame(round(val, 3), round(i_ci, 3), round(u_ci, 3), round(variance, 4))
   names(as_fr) <- c('as_fr_s','l_ci','u_ci','var')
   row.names(as_fr) <- 15:49
 
@@ -53,7 +53,7 @@ summary.frts_intvw <- function(x, level){
   val2 <- c()
   i_ci2 <- c()
   u_ci2 <- c()
-
+  variance2 <- c()
 
   for (i in levels(x$df$age.group)[-c(1,9)]) {
     temp <- paste('expo', i, sep = '')
@@ -63,17 +63,12 @@ summary.frts_intvw <- function(x, level){
     val2 <- c(val2, rate$ratio[2])
     i_ci2 <- c(i_ci2, ci[2])
     u_ci2 <- c(u_ci2, ci[4])
-
+    variance2 <- c(variance2,rate$var[2])
   }
 
-  ag_fr <- data.frame(round(val2, 3), round(i_ci2, 3), round(u_ci2, 3))
-  names(ag_fr) <- c('as_fr_g','l_ci','u_ci')
+  ag_fr <- data.frame(round(val2, 3), round(i_ci2, 3), round(u_ci2, 3), round(variance2, 4))
+  names(ag_fr) <- c('as_fr_g','l_ci','u_ci','var')
   row.names(ag_fr) <- c('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49')
-
-  as_fr$var <- NULL
-
-
-
 
   value <- list(as_fr_s = as_fr, t_fr = t_fr, as_fr_g = ag_fr)
   value
@@ -118,7 +113,7 @@ summary.frts_yrly <- function(x, level){
     variance <- c(variance,rate$var[2])
 
   }
-  as_fr <- data.frame(round(val, 3), round(i_ci, 3), round(u_ci, 3), variance)
+  as_fr <- data.frame(round(val, 3), round(i_ci, 3), round(u_ci, 3), round(variance, 4))
   names(as_fr) <- c('as_fr_s','l_ci','u_ci','var')
   row.names(as_fr) <- 15:49
 
@@ -133,7 +128,7 @@ summary.frts_yrly <- function(x, level){
   val2 <- c()
   i_ci2 <- c()
   u_ci2 <- c()
-
+  variance2 <- c()
 
   for (i in levels(x$df$age.group)[-c(1,9)]) {
     temp <- paste('expo', i, sep = '')
@@ -143,16 +138,12 @@ summary.frts_yrly <- function(x, level){
     val2 <- c(val2, rate$ratio[2])
     i_ci2 <- c(i_ci2, ci[2])
     u_ci2 <- c(u_ci2, ci[4])
-
+    variance2 <- c(variance2,rate$var[2])
 
   }
-  ag_fr <- data.frame(round(val2, 3), round(i_ci2, 3), round(u_ci2, 3))
-  names(ag_fr) <- c('as_fr_g','l_ci','u_ci')
+  ag_fr <- data.frame(round(val2, 3), round(i_ci2, 3), round(u_ci2, 3), round(variance2, 4))
+  names(ag_fr) <- c('as_fr_g','l_ci','u_ci','var')
   row.names(ag_fr) <- c('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49')
-
-
-  as_fr$var <- NULL
-
 
 
 
@@ -201,7 +192,7 @@ summary.frts_3yrs <- function(x,  level){
     variance <- c(variance,rate$var[2])
 
   }
-  as_fr_s <- data.frame(round(val, 3), round(i_ci, 3), round(u_ci, 3), variance)
+  as_fr_s <- data.frame(round(val, 3), round(i_ci, 3), round(u_ci, 3), round(variance, 4))
   names(as_fr_s) <- c('as_fr_s','l_ci','u_ci','var')
   row.names(as_fr_s) <- 15:49
 
@@ -216,7 +207,7 @@ summary.frts_3yrs <- function(x,  level){
   val2 <- c()
   i_ci2 <- c()
   u_ci2 <- c()
-
+  variance2 <- c()
 
   for (i in levels(x$df$age.group)[-c(1,9)]) {
     temp <- paste('expo', i, sep = '')
@@ -227,16 +218,12 @@ summary.frts_3yrs <- function(x,  level){
     val2 <- c(val2, rate$ratio[2])
     i_ci2 <- c(i_ci2, ci[2])
     u_ci2 <- c(u_ci2, ci[4])
-
+    variance2 <- c(variance2,rate$var[2])
 
   }
-  as_fr_g <- data.frame(round(val2, 3), round(i_ci2, 3), round(u_ci2, 3))
-  names(as_fr_g) <- c('as_fr_g','l_ci','u_ci')
+  as_fr_g <- data.frame(round(val2, 3), round(i_ci2, 3), round(u_ci2, 3), round(variance2, 4))
+  names(as_fr_g) <- c('as_fr_g','l_ci','u_ci','var')
   row.names(as_fr_g) <- c('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49')
-
-
-  as_fr$var <- NULL
-
 
   value <- list(as_fr_s = as_fr_s, t_fr = t_fr, as_fr_g = as_fr_g)
   value

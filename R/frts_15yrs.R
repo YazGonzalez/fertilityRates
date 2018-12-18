@@ -2,10 +2,11 @@
 #'
 #' Applies a given fertility rates methodology rates
 #' case-by-case to a data set and returns a list with the estimates by year.
-#'
-#' @param y.intvw A numeric which indicate the year in which the mother were interviewed.
+#' @param m.intvw A numeric or a vector which indicates the month in which the woman were interviewed.
+#' @param y.intvw A numeric which indicate the year in which the woman were interviewed.
 #' @param m.wmn A vector specifying the woman’s month of birth (mother or not mother).
 #' @param y.wmn A vector specifying the woman’s year of birth (mother or not mother).
+#' @param age.wmn A vector specifying the woman's age at the time of the interview (mother or not mother).
 #' @param m.child A vector specifying the child’s month of birth (if the woman doesn't have child, NA).
 #' @param y.child A vector specifying the child’s year of birth (if the woman doesn't have children, NA).
 #' @param children A vector which indicate the number of children.
@@ -23,16 +24,16 @@
 #'
 #' ## Information from ENADID 2014, INEGI
 #'
-#' mg4 <- frts_15yrs(y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, m.child=FEC_HIJ_M,
-#' y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
+#' mg4 <- frts_15yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDADD,
+#' m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
 #' data = enadid_2014, weights = FACTOR)
 #'
 #' summary(mg4)
 #'
 #' @export
 #'
-frts_15yrs<- function(y.intvw, m.wmn,
-                     y.wmn, m.child, y.child, children,
+frts_15yrs<- function(m.intvw, y.intvw, m.wmn,
+                     y.wmn, age.wmn, m.child, y.child, children,
                      child.dummy, wmn.dummy, id.wmn,
                      weights, data){
   if(is.data.frame(data)){
@@ -42,12 +43,17 @@ frts_15yrs<- function(y.intvw, m.wmn,
                              m.child, y.child,
                              children, child.dummy,
                              wmn.dummy, id.wmn, weights)
+      intvw.age  <-  ifelse(m.wmn >= m.intvw, age.wmn,  age.wmn-1)
+      age.wmn <- NULL
 
 
-      age.wmn <- y.intvw-1-y.wmn-1
-      age2.wmn <- y.intvw-1-y.wmn
+      age.wmn <- intvw.age - 1
+      age2.wmn <- age.wmn + 1
+
+
       database$age.wmn <- age.wmn
       database$age2.wmn <- age2.wmn
+      database$intvw.age <- intvw.age
       database$expo1 <- 0
       database$expo2 <- 0
 
@@ -102,24 +108,29 @@ frts_15yrs<- function(y.intvw, m.wmn,
                                     apply(exposition[c(31:35),c(1:14)],2,sum)))
 
 
-      estimate_age <- function(m.child, y.child, m.wmn, y.wmn){
-        random <- rbinom(length(m.child),1,0.5)
+      estimate_age <- function(m.child, y.child, m.wmn, intvw.age, y.intvw){
         age <- NULL
         for(i in 1:length(m.child)){
           if(is.na(m.child[i]) == F){
             if(m.child[i] > m.wmn[i] | m.child[i] < m.wmn[i]){
-              age=c(age, ceiling((12*(y.child[i]-y.wmn[i]) + (m.child[i]-m.wmn[i]))/12))
+              if(m.child[i] > m.wmn[i] ){
+                age = c(age, intvw.age[i]-(y.intvw-y.child[i])+1)
+              }
+              else{
+                age = c(age, intvw.age[i]-(y.intvw-y.child[i]))
+              }
             }
             else{
-              age=c(age, ceiling((12*(y.child[i]-y.wmn[i]) + (m.child[i]-m.wmn[i]-rbinom(1,1,0.5)))/12))
+              age = c(age, intvw.age[i]-(y.intvw-y.child[i])+rbinom(1,1,0.5))
             }
           }
-          else{age=c(age,0)}
+          else{age = c(age,0)}
         }
         return(age)
       }
 
-      database$age.mother <- estimate_age(database$m.child, database$y.child, database$m.wmn, database$y.wmn)
+
+      database$age.mother <- estimate_age(database$m.child, database$y.child, database$m.wmn, database$intvw.age, y.intvw)
 
       auxiliary_2 <- function(date, age, data){
         aux <- grep(date, data[ ,'y.child'],value=FALSE)

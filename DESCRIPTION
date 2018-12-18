@@ -16,4 +16,4 @@ URL: https://gitlab.com/YazGonzalez/fertilityRates
 Encoding: UTF-8
 LazyData: true
 Imports: survey
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

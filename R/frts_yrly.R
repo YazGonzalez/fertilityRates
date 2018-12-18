@@ -4,9 +4,12 @@
 #' case-by-case to a data set and returns another data set
 #' with the estimates by observation.
 #'
+#' @param m.intvw A numeric or a vector which indicates the month in which the woman were interviewed.
+#' @param y.intvw A numeric which indicate the year in which the woman were interviewed.
 #' @param y.ref A numeric which indicate the reference year. It must be between last five years above interview.
 #' @param m.wmn A vector specifying the woman’s month of birth (mother or not mother).
 #' @param y.wmn A vector specifying the woman’s year of birth (mother or not mother).
+#' @param age.wmn A vector specifying the woman's age at the time of the interview (mother or not mother).
 #' @param m.child A vector specifying the child’s month of birth (if the woman doesn't have child, NA).
 #' @param y.child A vector specifying the child’s year of birth (if the woman doesn't have children, NA).
 #' @param children A vector which indicate the number of children.
@@ -24,7 +27,7 @@
 #'
 #' ## Information from ENADID 2014, INEGI
 #'
-#' mg2 <- frts_yrly(y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, m.child=FEC_HIJ_M,
+#' mg2 <- frts_yrly(m.intvw=ENTREV_M, y.intvw=2014, y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDADD, m.child=FEC_HIJ_M,
 #' y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
 #' ids=UPM, strata=ESTRATO,data = enadid_2014, weights = FACTOR)
 #'
@@ -33,24 +36,31 @@
 #' @export
 #'
 
-frts_yrly<- function(y.ref, m.wmn,
-                      y.wmn, m.child, y.child, children,
+frts_yrly<- function(m.intvw, y.intvw, y.ref, m.wmn, y.wmn, age.wmn,
+                      m.child, y.child, children,
                       child.dummy, wmn.dummy, id.wmn, ids,
                       strata, weights, data){
   if(is.data.frame(data)){
     if (is.element("survey", installed.packages()[,1])) {
       if (!("package:survey" %in% search())) library ("survey")
       attach(data)
-      database <- data.frame(m.wmn, y.wmn, #PENDIENTE
+      database <- data.frame(m.wmn, y.wmn,
                              m.child, y.child,
                              children, child.dummy,
                              wmn.dummy, id.wmn)
 
 
-      age.wmn <- y.ref-y.wmn-1
-      age2.wmn <- y.ref-y.wmn
+      intvw.age  <-  ifelse(m.wmn >= m.intvw, age.wmn,  age.wmn-1)
+      age.wmn <- NULL
+
+      age.wmn <- intvw.age - (y.intvw-y.ref)
+      age2.wmn <- age.wmn + 1 #age2.wmn-(y.intvw-y.ref-1)
+
+
       database$age.wmn <- age.wmn
       database$age2.wmn <- age2.wmn
+      database$intvw.age <- intvw.age
+
       database$expo1 <- 0
       database$expo2 <- 0
 
@@ -91,24 +101,29 @@ frts_yrly<- function(y.ref, m.wmn,
 
       database <- cbind(database,data)
 
-      estimate_age <- function(m.child, y.child, m.wmn, y.wmn){
-        random <- rbinom(length(m.child),1,0.5)
+      estimate_age <- function(m.child, y.child, m.wmn, intvw.age, y.intvw){
         age <- NULL
         for(i in 1:length(m.child)){
           if(is.na(m.child[i]) == F){
             if(m.child[i] > m.wmn[i] | m.child[i] < m.wmn[i]){
-              age=c(age, ceiling((12*(y.child[i]-y.wmn[i]) + (m.child[i]-m.wmn[i]))/12))
+              if(m.child[i] > m.wmn[i] ){
+                age = c(age, intvw.age[i]-(y.intvw-y.child[i])+1)
+              }
+              else{
+                age = c(age, intvw.age[i]-(y.intvw-y.child[i]))
+              }
             }
             else{
-              age=c(age, ceiling((12*(y.child[i]-y.wmn[i]) + (m.child[i]-m.wmn[i]-rbinom(1,1,0.5)))/12))
+              age = c(age, intvw.age[i]-(y.intvw-y.child[i])+rbinom(1,1,0.5))
             }
           }
-          else{age=c(age,0)}
+          else{age = c(age,0)}
         }
         return(age)
       }
 
-      database$age.mother <- estimate_age(database$m.child, database$y.child, database$m.wmn, database$y.wmn)
+
+      database$age.mother <- estimate_age(database$m.child, database$y.child, database$m.wmn, database$intvw.age, y.intvw)
       database$age.group <- cut(database$age.mother, c(-1, 14, 19, 24, 29, 34, 39, 44, 49, 60))
       levels(database$age.group) <- c('0_14', '15_19', '20_24', '25_29', '30_34', '35_39', '40_44', '45_49', '50_60')
 
@@ -135,7 +150,7 @@ frts_yrly<- function(y.ref, m.wmn,
       ds <- svydesign(id = ~ids,
                       strata = ~strata,
                       weights = ~weights,
-                      data = database, nest=TRUE) #JUST NEST
+                      data = database, nest=TRUE)
 
       value <- list(df = database, ds = ds, year = y.ref)
 
