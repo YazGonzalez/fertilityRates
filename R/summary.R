@@ -161,9 +161,9 @@ summary.frts_yrly <- function(x, level){
 
 }
 
-#' Summarize the data of last three years prior to the year of survey
+#' Summarize the data of last five years to three-year periods in fertility rates
 #'
-#' Summarize the data of last three years prior to the year of survey in age-specific fertility rates
+#' Summarize the data of last five years to three-year periods in age-specific fertility rates
 #' by single year of age and grouped year of age, and total fertility rate.
 #'
 #' @param x An object of class "frts_3yrs".
