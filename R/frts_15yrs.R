@@ -13,8 +13,6 @@
 #' @param child.dummy A vector which indicate 0 if the woman doesn't have a child or 1 if the woman has a child.
 #' @param wmn.dummy A vector which indicate TRUE if the woman isn't duplicate or FALSE if the woman is duplicate.
 #' @param id.wmn A vector wich indicate the woman's identification.
-#' @param ids A vector specifying cluster ids from largest level to smallest level.
-#' @param strata A vector specifying strata.
 #' @param weights A vetor pecifying sampling weights as an alternative to prob (1/weights).
 #' @param data A data frame containing the above variables.
 #'
@@ -24,8 +22,8 @@
 #'
 #' ## Information from ENADID 2014, INEGI
 #'
-#' mg4 <- frts_15yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDADD,
-#' m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
+#' mg4 <- frts_15yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M,
+#' m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT, wmn.dummy=MUJER, id.wmn=ID_1,
 #' weights = FACTOR, data = enadid_2014)
 #'
 #' summary(mg4)

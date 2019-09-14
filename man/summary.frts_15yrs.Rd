@@ -16,3 +16,14 @@ An object of class list. The elements of this are "as_fr_s", "t_fr" and "as_fr_g
 Summarize the data of last fifteen-years to annual periods in age-specific fertility rates
 by single year of age and grouped year of age, and total fertility rate.
 }
+\examples{
+
+## Information from ENADID 2014, INEGI
+
+mg4 <- frts_15yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M,
+m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
+weights = FACTOR, data = enadid_2014)
+
+summary(mg4)
+
+}

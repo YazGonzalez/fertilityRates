@@ -10,10 +10,14 @@ Description: This is an R package to do point estimates and confidence
     within five years prior to the date of survey. In addition, point estimates 
     of the aforementioned fertility measures for the last fifteen-year prior to the survey. 
     The fertilityRates package uses Tom A Moultrie's methodology "Direct estimation of fertility 
-    from survey data containing birth histories." in Tools for Demographic Estimation.
+    from survey data containing birth histories." in Tools for Demographic Estimation, with a small change in 
+    the calculation of the age of each woman at the start of the year in which she was interviewed Working.
+    The packages belongs to the development of a thesis.
 License: MIT + file LICENSE
 URL: https://gitlab.com/YazGonzalez/fertilityRates
 Encoding: UTF-8
 LazyData: true
-Imports: survey
+Depends:
+    R (>= 3.5.0), survey  (>= 3.1.0)
+Imports: stats
 RoxygenNote: 6.1.1

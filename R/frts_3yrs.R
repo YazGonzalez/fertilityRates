@@ -29,21 +29,20 @@
 #' ## Information from ENADID 2014, INEGI
 #'
 #' mg3 <- frts_3yrs(m.intvw=ENTREV_M , y.intvw=2014, y.first=2013, y.second=2012, y.third=2011,
-#'  m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDADD, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, child.dummy=CONT,
+#'  m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, child.dummy=CONT,
 #'  wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
 #'
 #' summary(mg3, level = 0.9)
 #'
 #' @export
 #'
-
 frts_3yrs<- function(m.intvw, y.intvw, y.first, y.second, y.third, m.wmn,
                      y.wmn, age.wmn, m.child, y.child,
                      child.dummy, wmn.dummy, id.wmn, ids,
                      strata, weights, data){
 
   if(is.data.frame(data)){
-    if (is.element("survey", installed.packages()[,1])) {
+    if (requireNamespace("survey", quietly = TRUE)) {
       if (!("package:survey" %in% search())) library ("survey")
       attach(data)
       database <- data.frame(m.wmn, y.wmn,

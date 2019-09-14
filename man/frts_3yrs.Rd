@@ -56,7 +56,7 @@ with the estimates by observation.
 ## Information from ENADID 2014, INEGI
 
 mg3 <- frts_3yrs(m.intvw=ENTREV_M , y.intvw=2014, y.first=2013, y.second=2012, y.third=2011,
- m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDADD, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, child.dummy=CONT,
+ m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, child.dummy=CONT,
  wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
 
 summary(mg3, level = 0.9)

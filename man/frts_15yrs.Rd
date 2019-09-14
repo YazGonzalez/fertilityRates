@@ -33,10 +33,6 @@ frts_15yrs(m.intvw, y.intvw, m.wmn, y.wmn, age.wmn, m.child, y.child,
 \item{weights}{A vetor pecifying sampling weights as an alternative to prob (1/weights).}
 
 \item{data}{A data frame containing the above variables.}
-
-\item{ids}{A vector specifying cluster ids from largest level to smallest level.}
-
-\item{strata}{A vector specifying strata.}
 }
 \value{
 An object of class frts_15yrs containing four arrays and a numeric.
@@ -49,9 +45,9 @@ case-by-case to a data set and returns a list with the estimates by year.
 
 ## Information from ENADID 2014, INEGI
 
-mg4 <- frts_15yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDADD,
-m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
-data = enadid_2014, weights = FACTOR)
+mg4 <- frts_15yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M,
+m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT, wmn.dummy=MUJER, id.wmn=ID_1,
+weights = FACTOR, data = enadid_2014)
 
 summary(mg4)
 

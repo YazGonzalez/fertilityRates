@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.R
 \name{summary.frts_3yrs}
 \alias{summary.frts_3yrs}
-\title{Summarize the data of last three years prior to the year of survey}
+\title{Summarize the data of last five years to three-year periods in fertility rates}
 \usage{
 \method{summary}{frts_3yrs}(x, level)
 }
@@ -15,16 +15,16 @@
 An object of class list. The elements of this are "as_fr_s", "t_fr" and "as_fr_g".
 }
 \description{
-Summarize the data of last three years prior to the year of survey in age-specific fertility rates
+Summarize the data of last five years to three-year periods in age-specific fertility rates
 by single year of age and grouped year of age, and total fertility rate.
 }
 \examples{
 
 ## Information from ENADID 2014, INEGI
 
-mg3 <- frts_3yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDADD
-m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER,
-id.wmn=ID_1, ids=UPM, strata=ESTRATO, data = enadid_2014, weights = FACTOR)
+mg3 <- frts_3yrs(m.intvw=ENTREV_M , y.intvw=2014, y.first=2013, y.second=2012, y.third=2011,
+ m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, child.dummy=CONT,
+ wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
 
 summary(mg3, level = 0.9)
 

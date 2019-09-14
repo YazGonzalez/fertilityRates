@@ -1,24 +1,22 @@
-#' National Survey of Demographic Dynamics 2014
+#' National Survey of Demographic Dynamics 1997
 #'
 #' A dataset containing  attributes of the women and attributes of the children.
-#' The variables are as follows:
 #'
-#' @format A data frame with 214335 rows and 13 variables
+#'
+#' @format A data frame with 233517 rows and 12 variables
 #'
 #'
 #' * ID_1: Indicate the woman's identification.
 #'
 #' * FACTOR: Sampling weights.
 #'
-#' * UPM: Cluster ids.
-#'
 #' * ESTRATO: Strata.
-#'
-#' * ENTIDAD: States where the women live.
 #'
 #' * FEC_MUJ_M: The woman’s month of birth.
 #'
 #' * FEC_MUJ_A: The woman’s year of birth.
+#'
+#' * EDAD_M: The woman's age at the time of the interview (mother or not mother).
 #'
 #' * ENTREV_M: The month in which the mother were interviewed.
 #'
@@ -34,7 +32,7 @@
 #'
 #'
 #'
-#' @source <http://www.beta.inegi.org.mx/proyectos/enchogares/especiales/enadid/2014/>
+#' @source <https://www.inegi.org.mx/programas/enadid/1997/default.html#Microdatos>
 #'
-"enadid_2014"
+"enadid_1997"
 

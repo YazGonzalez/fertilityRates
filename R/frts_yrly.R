@@ -27,7 +27,7 @@
 #'
 #' ## Information from ENADID 2014, INEGI
 #'
-#' mg2 <- frts_yrly(m.intvw=ENTREV_M, y.intvw=2014, y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDADD, m.child=FEC_HIJ_M,
+#' mg2 <- frts_yrly(m.intvw=ENTREV_M, y.intvw=2014, y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M,
 #' y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
 #' ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
 #'
@@ -41,7 +41,7 @@ frts_yrly<- function(m.intvw, y.intvw, y.ref, m.wmn, y.wmn, age.wmn,
                       child.dummy, wmn.dummy, id.wmn, ids,
                       strata, weights, data){
   if(is.data.frame(data)){
-    if (is.element("survey", installed.packages()[,1])) {
+    if (requireNamespace("survey", quietly = TRUE)) {
       if (!("package:survey" %in% search())) library ("survey")
       attach(data)
       database <- data.frame(m.wmn, y.wmn,
@@ -153,6 +153,7 @@ frts_yrly<- function(m.intvw, y.intvw, y.ref, m.wmn, y.wmn, age.wmn,
                       data = database, nest=TRUE)
 
       value <- list(df = database, ds = ds, year = y.ref)
+
 
       attr(value, 'class') <- 'frts_yrly'
       value

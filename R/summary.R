@@ -12,15 +12,17 @@
 #'
 #' ## Information from ENADID 2014, INEGI
 #'
-#' mg1 <- frts_intvw(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, m.child=FEC_HIJ_M,
-#' y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO,
-#' data = enadid_2014, weights = FACTOR)
+#' mg1 <- frts_intvw(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M,
+#' y.child=FEC_HIJ_A, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO,
+#' weights = FACTOR, data = enadid_2014)
 #'
 #' summary(mg1, level = 0.9)
 #'
 #'
 #' @export
 summary.frts_intvw <- function(x, level){
+  if (requireNamespace("survey", quietly = TRUE)) {
+    if (!("package:survey" %in% search())) library ("survey")
 
   val <- c()
   i_ci <- c()
@@ -48,6 +50,7 @@ summary.frts_intvw <- function(x, level){
   a <- (1 - level)
   t_fr <- round(c(rate, rate + qt(a/2, df=degf(x$ds)) * se, rate + qt(1-a/2, df=degf(x$ds)) * se), 3)
   names(t_fr) <- c('t_fr','l_ci','u_ci')
+  t_fr <- as.data.frame(t_fr)
 
 
   val2 <- c()
@@ -77,6 +80,9 @@ summary.frts_intvw <- function(x, level){
 
   value <- list(as_fr_s = as_fr, t_fr = t_fr, as_fr_g = ag_fr)
   value
+  } else {
+    stop("Library 'survey' must be installed")
+  }
 }
 
 #' Summarize the data of last complete years up to five years in fertility rates
@@ -93,14 +99,16 @@ summary.frts_intvw <- function(x, level){
 #'
 #' ## Information from ENADID 2014, INEGI
 #'
-#' mg2 <- frts_yrly(y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, m.child=FEC_HIJ_M,
+#' mg2 <- frts_yrly(m.intvw=ENTREV_M, y.intvw=2014, y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M,
 #' y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
-#' ids=UPM, strata=ESTRATO,data = enadid_2014, weights = FACTOR)
+#' ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
 #'
 #' summary(mg2, level = 0.9)
 
 #' @export
 summary.frts_yrly <- function(x, level){
+  if (requireNamespace("survey", quietly = TRUE)) {
+    if (!("package:survey" %in% search())) library ("survey")
 
   val <- c()
   i_ci <- c()
@@ -128,6 +136,7 @@ summary.frts_yrly <- function(x, level){
   a <- (1 - level)
   t_fr <- round(c(rate, rate + qt(a/2, df=degf(x$ds)) * se, rate + qt(1-a/2, df=degf(x$ds)) * se), 3)
   names(t_fr) <- c('t_fr','l_ci','u_ci')
+  t_fr <- as.data.frame(t_fr)
 
 
   val2 <- c()
@@ -158,6 +167,9 @@ summary.frts_yrly <- function(x, level){
 
   value <- list(as_fr_s = as_fr, t_fr = t_fr, as_fr_g = ag_fr)
   value
+  } else {
+    stop("Library 'survey' must be installed")
+  }
 
 }
 
@@ -175,14 +187,16 @@ summary.frts_yrly <- function(x, level){
 #'
 #' ## Information from ENADID 2014, INEGI
 #'
-#' mg3 <- frts_3yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDADD
-#' m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER,
-#' id.wmn=ID_1, ids=UPM, strata=ESTRATO, data = enadid_2014, weights = FACTOR)
+#' mg3 <- frts_3yrs(m.intvw=ENTREV_M , y.intvw=2014, y.first=2013, y.second=2012, y.third=2011,
+#'  m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, child.dummy=CONT,
+#'  wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
 #'
 #' summary(mg3, level = 0.9)
 #'
 #' @export
 summary.frts_3yrs <- function(x,  level){
+  if (requireNamespace("survey", quietly = TRUE)) {
+    if (!("package:survey" %in% search())) library ("survey")
 
   val <- c()
   i_ci <- c()
@@ -201,16 +215,17 @@ summary.frts_3yrs <- function(x,  level){
     variance <- c(variance,rate$var[2])
 
   }
-  as_fr_s <- data.frame(round(val, 3), round(i_ci, 3), round(u_ci, 3), variance)
-  names(as_fr_s) <- c('as_fr_s','l_ci','u_ci','var')
-  row.names(as_fr_s) <- 15:49
+  as_fr <- data.frame(round(val, 3), round(i_ci, 3), round(u_ci, 3), variance)
+  names(as_fr) <- c('as_fr_s','l_ci','u_ci','var')
+  row.names(as_fr) <- 15:49
 
 
-  rate <- apply(as_fr_s,2,sum)[1]
-  se <- sqrt(apply(as_fr_s,2,sum)[4])
+  rate <- apply(as_fr,2,sum)[1]
+  se <- sqrt(apply(as_fr,2,sum)[4])
   a <- (1 - level)
   t_fr <- round(c(rate, rate + qt(a/2, df=degf(x$ds)) * se, rate + qt(1-a/2, df=degf(x$ds)) * se), 3)
   names(t_fr) <- c('t_fr','l_ci','u_ci')
+  t_fr <- as.data.frame(t_fr)
 
 
   val2 <- c()
@@ -230,16 +245,19 @@ summary.frts_3yrs <- function(x,  level){
 
 
   }
-  as_fr_g <- data.frame(round(val2, 3), round(i_ci2, 3), round(u_ci2, 3))
-  names(as_fr_g) <- c('as_fr_g','l_ci','u_ci')
-  row.names(as_fr_g) <- c('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49')
+  ag_fr <- data.frame(round(val2, 3), round(i_ci2, 3), round(u_ci2, 3))
+  names(ag_fr) <- c('as_fr_g','l_ci','u_ci')
+  row.names(ag_fr) <- c('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49')
 
 
   as_fr$var <- NULL
 
 
-  value <- list(as_fr_s = as_fr_s, t_fr = t_fr, as_fr_g = as_fr_g)
+  value <- list(as_fr_s = as_fr, t_fr = t_fr, as_fr_g = ag_fr)
   value
+  } else {
+    stop("Library 'survey' must be installed")
+  }
 
 }
 
@@ -251,6 +269,16 @@ summary.frts_3yrs <- function(x,  level){
 #' @param x An object of class "frts_3yrs".
 #'
 #' @return An object of class list. The elements of this are "as_fr_s", "t_fr" and "as_fr_g".
+#'
+#' @examples
+#'
+#' ## Information from ENADID 2014, INEGI
+#'
+#' mg4 <- frts_15yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M,
+#' m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
+#' weights = FACTOR, data = enadid_2014)
+#'
+#' summary(mg4)
 #'
 #' @export
 summary.frts_15yrs <- function(x){
@@ -342,6 +370,7 @@ summary.frts_15yrs <- function(x){
   }
 
   t_frs <- apply(as_frs, 2, sum)
+  t_frs <- as.data.frame(t_frs)
 
 
   value <- list(as_fr_s = round(as_frs, 3), t_frs = round(t_frs, 3), as_fr_g = round(rgp,3))

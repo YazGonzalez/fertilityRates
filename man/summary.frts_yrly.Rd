@@ -22,9 +22,9 @@ by single year of age and grouped year of age, and total fertility rate.
 
 ## Information from ENADID 2014, INEGI
 
-mg2 <- frts_yrly(y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, m.child=FEC_HIJ_M,
+mg2 <- frts_yrly(m.intvw=ENTREV_M, y.intvw=2014, y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M,
 y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
-ids=UPM, strata=ESTRATO,data = enadid_2014, weights = FACTOR)
+ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
 
 summary(mg2, level = 0.9)
 }
