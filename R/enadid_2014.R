@@ -28,8 +28,6 @@
 #'
 #' * FEC_HIJ_A: The child’s year of birth.
 #'
-#' * CONT: Indicate 0 if the woman doesn't have a child or 1 if the woman has a child.
-#'
 #' * MUJER: Indicate TRUE if the woman isn't duplicate or FALSE if the woman is duplicate.
 #'
 #'

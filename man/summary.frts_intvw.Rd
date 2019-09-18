@@ -4,12 +4,14 @@
 \alias{summary.frts_intvw}
 \title{Summarize the data of year of interview in fertility rates}
 \usage{
-\method{summary}{frts_intvw}(x, level)
+\method{summary}{frts_intvw}(object, level, ...)
 }
 \arguments{
-\item{x}{An object of class "frts_intvw".}
+\item{object}{An object of class "frts_intvw".}
 
 \item{level}{The confidence level required to confidence intervals for fertility rates.}
+
+\item{...}{Additional arguments affecting the summary produced.}
 }
 \value{
 An object of class list. The elements of this are "as_fr_s", "t_fr" and "as_fr_g".
@@ -23,10 +25,9 @@ by single year of age and grouped year of age, and total fertility rate.
 ## Information from ENADID 2014, INEGI
 
 mg1 <- frts_intvw(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M,
-y.child=FEC_HIJ_A, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO,
-weights = FACTOR, data = enadid_2014)
+ y.child=FEC_HIJ_A, wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO,
+ weights = FACTOR, data = enadid_2014)
 
 summary(mg1, level = 0.9)
-
 
 }

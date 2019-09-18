@@ -2,6 +2,7 @@
 #'
 #' Applies a given fertility rates methodology rates
 #' case-by-case to a data set and returns a list with the estimates by year.
+#'
 #' @param m.intvw A numeric or a vector which indicates the month in which the woman were interviewed.
 #' @param y.intvw A numeric which indicate the year in which the woman were interviewed.
 #' @param m.wmn A vector specifying the woman’s month of birth (mother or not mother).
@@ -9,8 +10,6 @@
 #' @param age.wmn A vector specifying the woman's age at the time of the interview (mother or not mother).
 #' @param m.child A vector specifying the child’s month of birth (if the woman doesn't have child, NA).
 #' @param y.child A vector specifying the child’s year of birth (if the woman doesn't have children, NA).
-#' @param children A vector which indicate the number of children.
-#' @param child.dummy A vector which indicate 0 if the woman doesn't have a child or 1 if the woman has a child.
 #' @param wmn.dummy A vector which indicate TRUE if the woman isn't duplicate or FALSE if the woman is duplicate.
 #' @param id.wmn A vector wich indicate the woman's identification.
 #' @param weights A vetor pecifying sampling weights as an alternative to prob (1/weights).
@@ -22,25 +21,27 @@
 #'
 #' ## Information from ENADID 2014, INEGI
 #'
-#' mg4 <- frts_15yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M,
-#' m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT, wmn.dummy=MUJER, id.wmn=ID_1,
-#' weights = FACTOR, data = enadid_2014)
+#' mg4 <- frts_15yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A,
+#'  age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, wmn.dummy=MUJER, id.wmn=ID_1,
+#'  weights = FACTOR, data = enadid_2014)
 #'
 #' summary(mg4)
 #'
 #' @export
 #'
 frts_15yrs<- function(m.intvw, y.intvw, m.wmn,
-                     y.wmn, age.wmn, m.child, y.child, children,
-                     child.dummy, wmn.dummy, id.wmn,
+                     y.wmn, age.wmn, m.child, y.child,
+                     wmn.dummy, id.wmn,
                      weights, data){
   if(is.data.frame(data)){
 
       attach(data)
       database <- data.frame(m.wmn, y.wmn,
                              m.child, y.child,
-                             children, child.dummy,
                              wmn.dummy, id.wmn, weights)
+
+      database$child.dummy <- ifelse(is.na(y.child)==FALSE, 1, 0)
+
       intvw.age  <-  ifelse(m.wmn >= m.intvw, age.wmn,  age.wmn-1)
       age.wmn <- NULL
 
@@ -119,7 +120,7 @@ frts_15yrs<- function(m.intvw, y.intvw, m.wmn,
               }
             }
             else{
-              age = c(age, intvw.age[i]-(y.intvw-y.child[i])+rbinom(1,1,0.5))
+              age = c(age, intvw.age[i]-(y.intvw-y.child[i])+stats::rbinom(1,1,0.5))
             }
           }
           else{age = c(age,0)}

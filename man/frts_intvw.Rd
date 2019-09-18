@@ -5,7 +5,7 @@
 \title{Apply fertility rates methodology for year of interview}
 \usage{
 frts_intvw(m.intvw, y.intvw, m.wmn, y.wmn, age.wmn, m.child, y.child,
-  child.dummy, wmn.dummy, id.wmn, ids, strata, weights, data)
+  wmn.dummy, id.wmn, ids, strata, weights, data)
 }
 \arguments{
 \item{m.intvw}{A numeric or a vector which indicates the month in which the woman were interviewed.}
@@ -21,8 +21,6 @@ frts_intvw(m.intvw, y.intvw, m.wmn, y.wmn, age.wmn, m.child, y.child,
 \item{m.child}{A vector specifying the child’s month of birth (if the woman doesn't have child, NA).}
 
 \item{y.child}{A vector specifying the child’s year of birth (if the woman doesn't have children, NA).}
-
-\item{child.dummy}{A vector which indicate 0 if the woman doesn't have a child or 1 if the woman has a child.}
 
 \item{wmn.dummy}{A vector which indicate TRUE if the woman isn't duplicate or FALSE if the woman is duplicate.}
 
@@ -49,8 +47,8 @@ with the estimates by observation.
 ## Information from ENADID 2014, INEGI
 
 mg1 <- frts_intvw(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M,
-y.child=FEC_HIJ_A, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO,
-weights = FACTOR, data = enadid_2014)
+ y.child=FEC_HIJ_A, wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO,
+ weights = FACTOR, data = enadid_2014)
 
 summary(mg1, level = 0.9)
 

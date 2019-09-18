@@ -3,8 +3,9 @@
 #' Summarize the data of year of interview in age-specific fertility rates
 #' by single year of age and grouped year of age, and total fertility rate.
 #'
-#' @param x An object of class "frts_intvw".
+#' @param object An object of class "frts_intvw".
 #' @param level The confidence level required to confidence intervals for fertility rates.
+#' @param ... Additional arguments affecting the summary produced.
 #'
 #' @return An object of class list. The elements of this are "as_fr_s", "t_fr" and "as_fr_g".
 #'
@@ -12,17 +13,15 @@
 #'
 #' ## Information from ENADID 2014, INEGI
 #'
-#' mg1 <- frts_intvw(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M,
-#' y.child=FEC_HIJ_A, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO,
-#' weights = FACTOR, data = enadid_2014)
+#' mg1 <- frts_intvw(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A,
+#'  age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, wmn.dummy=MUJER, id.wmn=ID_1,
+#'  ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
 #'
 #' summary(mg1, level = 0.9)
 #'
-#'
 #' @export
-summary.frts_intvw <- function(x, level){
+summary.frts_intvw <- function(object, level, ...){
   if (requireNamespace("survey", quietly = TRUE)) {
-    if (!("package:survey" %in% search())) library ("survey")
 
   val <- c()
   i_ci <- c()
@@ -31,9 +30,9 @@ summary.frts_intvw <- function(x, level){
 
   for (i in 15:49) {
     temp <- paste('exposition_',as.character(i),sep = '')
-    rate <- svyratio(~ child.dummy * (y.child == y.intvw & age.mother == i),
-                     ~ x$df[,grep(temp, names(x$df), value=TRUE)], x$ds, na.rm=TRUE)
-    ci <- confint(rate, level = level, df=degf(x$ds))
+    rate <- survey::svyratio(~ child.dummy * (y.child == y.intvw & age.mother == i),
+                     ~ object$df[,grep(temp, names(object$df), value=TRUE)], object$ds, na.rm=TRUE)
+    ci <- stats::confint(rate, level = level, df=survey::degf(object$ds))
     val <- c(val, rate$ratio[2])
     i_ci <- c(i_ci, ci[2])
     u_ci <- c(u_ci, ci[4])
@@ -48,7 +47,7 @@ summary.frts_intvw <- function(x, level){
   rate <- apply(as_fr,2,sum)[1]
   se <- sqrt(apply(as_fr,2,sum)[4])
   a <- (1 - level)
-  t_fr <- round(c(rate, rate + qt(a/2, df=degf(x$ds)) * se, rate + qt(1-a/2, df=degf(x$ds)) * se), 3)
+  t_fr <- round(c(rate, rate + stats::qt(a/2, df=survey::degf(object$ds)) * se, rate + stats::qt(1-a/2, df=survey::degf(object$ds)) * se), 3)
   names(t_fr) <- c('t_fr','l_ci','u_ci')
   t_fr <- as.data.frame(t_fr)
 
@@ -58,11 +57,11 @@ summary.frts_intvw <- function(x, level){
   u_ci2 <- c()
 
 
-  for (i in levels(x$df$age.group)[-c(1,9)]) {
+  for (i in levels(object$df$age.group)[-c(1,9)]) {
     temp <- paste('expo', i, sep = '')
-    rate <- svyratio(~ child.dummy * (y.child == y.intvw & age.group == i),
-                     ~ x$df[,grep(temp, names(x$df), value=TRUE)], x$ds, na.rm=TRUE)
-    ci <- confint(rate, level = level, df=degf(x$ds))
+    rate <- survey::svyratio(~ child.dummy * (y.child == y.intvw & age.group == i),
+                     ~ object$df[,grep(temp, names(object$df), value=TRUE)], object$ds, na.rm=TRUE)
+    ci <- stats::confint(rate, level = level, df=survey::degf(object$ds))
     val2 <- c(val2, rate$ratio[2])
     i_ci2 <- c(i_ci2, ci[2])
     u_ci2 <- c(u_ci2, ci[4])
@@ -85,13 +84,16 @@ summary.frts_intvw <- function(x, level){
   }
 }
 
+
+
 #' Summarize the data of last complete years up to five years in fertility rates
 #'
 #' Summarize the data of last complete years up to five years in age-specific fertility rates
 #' by single year of age and grouped year of age, and total fertility rate.
 #'
-#' @param x An object of class "frts_yrly".
+#' @param object An object of class "frts_yrly".
 #' @param level The confidence level required to confidence intervals for fertility rates.
+#' @param ... Additional arguments affecting the summary produced.
 #'
 #' @return An object of class list. The elements of this are "as_fr_s", "t_fr" and "as_fr_g".
 #'
@@ -99,16 +101,16 @@ summary.frts_intvw <- function(x, level){
 #'
 #' ## Information from ENADID 2014, INEGI
 #'
-#' mg2 <- frts_yrly(m.intvw=ENTREV_M, y.intvw=2014, y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M,
-#' y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
-#' ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
+#' mg2 <- frts_yrly(m.intvw=ENTREV_M, y.intvw=2014, y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A,
+#'  age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, wmn.dummy=MUJER, id.wmn=ID_1,
+#'  ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
 #'
 #' summary(mg2, level = 0.9)
 
 #' @export
-summary.frts_yrly <- function(x, level){
+summary.frts_yrly <- function(object, level, ...){
   if (requireNamespace("survey", quietly = TRUE)) {
-    if (!("package:survey" %in% search())) library ("survey")
+
 
   val <- c()
   i_ci <- c()
@@ -117,9 +119,9 @@ summary.frts_yrly <- function(x, level){
 
   for (i in 15:49) {
     temp <- paste('exposition_',as.character(i),sep = '')
-    rate <- svyratio(~ child.dummy * (y.child == x$year & age.mother == i),
-                     ~ x$df[,grep(temp, names(x$df), value=TRUE)], x$ds, na.rm=TRUE)
-    ci <- confint(rate, level = level, df=degf(x$ds))
+    rate <- survey::svyratio(~ child.dummy * (y.child == object$year & age.mother == i),
+                     ~ object$df[,grep(temp, names(object$df), value=TRUE)], object$ds, na.rm=TRUE)
+    ci <- stats::confint(rate, level = level, df=survey::degf(object$ds))
     val <- c(val, rate$ratio[2])
     i_ci <- c(i_ci, ci[2])
     u_ci <- c(u_ci, ci[4])
@@ -134,7 +136,7 @@ summary.frts_yrly <- function(x, level){
   rate <- apply(as_fr,2,sum)[1]
   se <- sqrt(apply(as_fr,2,sum)[4])
   a <- (1 - level)
-  t_fr <- round(c(rate, rate + qt(a/2, df=degf(x$ds)) * se, rate + qt(1-a/2, df=degf(x$ds)) * se), 3)
+  t_fr <- round(c(rate, rate + stats::qt(a/2, df=survey::degf(object$ds)) * se, rate + stats::qt(1-a/2, df=survey::degf(object$ds)) * se), 3)
   names(t_fr) <- c('t_fr','l_ci','u_ci')
   t_fr <- as.data.frame(t_fr)
 
@@ -144,11 +146,11 @@ summary.frts_yrly <- function(x, level){
   u_ci2 <- c()
 
 
-  for (i in levels(x$df$age.group)[-c(1,9)]) {
+  for (i in levels(object$df$age.group)[-c(1,9)]) {
     temp <- paste('expo', i, sep = '')
-    rate <- svyratio(~ child.dummy * (y.child == x$year & age.group == i),
-                     ~ x$df[,grep(temp, names(x$df), value=TRUE)], x$ds, na.rm=TRUE)
-    ci <- confint(rate, level = level, df=degf(x$ds))
+    rate <- survey::svyratio(~ child.dummy * (y.child == object$year & age.group == i),
+                     ~ object$df[,grep(temp, names(object$df), value=TRUE)], object$ds, na.rm=TRUE)
+    ci <- stats::confint(rate, level = level, df=survey::degf(object$ds))
     val2 <- c(val2, rate$ratio[2])
     i_ci2 <- c(i_ci2, ci[2])
     u_ci2 <- c(u_ci2, ci[4])
@@ -178,8 +180,9 @@ summary.frts_yrly <- function(x, level){
 #' Summarize the data of last five years to three-year periods in age-specific fertility rates
 #' by single year of age and grouped year of age, and total fertility rate.
 #'
-#' @param x An object of class "frts_3yrs".
+#' @param object An object of class "frts_3yrs".
 #' @param level The confidence level required to confidence intervals for fertility rates.
+#' @param ... Additional arguments affecting the summary produced.
 #'
 #' @return An object of class list. The elements of this are "as_fr_s", "t_fr" and "as_fr_g".
 #'
@@ -188,15 +191,15 @@ summary.frts_yrly <- function(x, level){
 #' ## Information from ENADID 2014, INEGI
 #'
 #' mg3 <- frts_3yrs(m.intvw=ENTREV_M , y.intvw=2014, y.first=2013, y.second=2012, y.third=2011,
-#'  m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, child.dummy=CONT,
+#'  m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A,
 #'  wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
 #'
 #' summary(mg3, level = 0.9)
 #'
 #' @export
-summary.frts_3yrs <- function(x,  level){
+summary.frts_3yrs <- function(object,  level, ...){
   if (requireNamespace("survey", quietly = TRUE)) {
-    if (!("package:survey" %in% search())) library ("survey")
+
 
   val <- c()
   i_ci <- c()
@@ -205,10 +208,10 @@ summary.frts_3yrs <- function(x,  level){
 
   for (i in 15:49) {
     temp <- paste('exposition_',as.character(i),sep = '')
-    rate <- svyratio(~ child.dummy * ((y.child == x$period[1] | y.child == x$period[2] | y.child == x$period[3])
+    rate <- survey::svyratio(~ child.dummy * ((y.child == object$period[1] | y.child == object$period[2] | y.child == object$period[3])
                                       & age.mother == i),
-                     ~ x$df[,grep(temp, names(x$df), value=TRUE)], x$ds, na.rm=TRUE)
-    ci <- confint(rate, level = level, df=degf(x$ds))
+                     ~ object$df[,grep(temp, names(object$df), value=TRUE)], object$ds, na.rm=TRUE)
+    ci <- stats::confint(rate, level = level, df=survey::degf(object$ds))
     val <- c(val, rate$ratio[2])
     i_ci <- c(i_ci, ci[2])
     u_ci <- c(u_ci, ci[4])
@@ -223,7 +226,7 @@ summary.frts_3yrs <- function(x,  level){
   rate <- apply(as_fr,2,sum)[1]
   se <- sqrt(apply(as_fr,2,sum)[4])
   a <- (1 - level)
-  t_fr <- round(c(rate, rate + qt(a/2, df=degf(x$ds)) * se, rate + qt(1-a/2, df=degf(x$ds)) * se), 3)
+  t_fr <- round(c(rate, rate + stats::qt(a/2, df=survey::degf(object$ds)) * se, rate + stats::qt(1-a/2, df=survey::degf(object$ds)) * se), 3)
   names(t_fr) <- c('t_fr','l_ci','u_ci')
   t_fr <- as.data.frame(t_fr)
 
@@ -233,12 +236,12 @@ summary.frts_3yrs <- function(x,  level){
   u_ci2 <- c()
 
 
-  for (i in levels(x$df$age.group)[-c(1,9)]) {
+  for (i in levels(object$df$age.group)[-c(1,9)]) {
     temp <- paste('expo', i, sep = '')
-    rate <- svyratio(~ child.dummy * ((y.child == x$period[1] | y.child == x$period[2] | y.child == x$period[3])
+    rate <- survey::svyratio(~ child.dummy * ((y.child == object$period[1] | y.child == object$period[2] | y.child == object$period[3])
                                       & age.group == i),
-                     ~ x$df[,grep(temp, names(x$df), value=TRUE)], x$ds, na.rm=TRUE)
-    ci <- confint(rate, level = level, df=degf(x$ds))
+                     ~ object$df[,grep(temp, names(object$df), value=TRUE)], object$ds, na.rm=TRUE)
+    ci <- stats::confint(rate, level = level, df=survey::degf(object$ds))
     val2 <- c(val2, rate$ratio[2])
     i_ci2 <- c(i_ci2, ci[2])
     u_ci2 <- c(u_ci2, ci[4])
@@ -266,7 +269,8 @@ summary.frts_3yrs <- function(x,  level){
 #' Summarize the data of last fifteen-years to annual periods in age-specific fertility rates
 #' by single year of age and grouped year of age, and total fertility rate.
 #'
-#' @param x An object of class "frts_3yrs".
+#' @param object An object of class "frts_15yrs"
+#' @param ... Additional arguments affecting the summary produced.
 #'
 #' @return An object of class list. The elements of this are "as_fr_s", "t_fr" and "as_fr_g".
 #'
@@ -274,24 +278,24 @@ summary.frts_3yrs <- function(x,  level){
 #'
 #' ## Information from ENADID 2014, INEGI
 #'
-#' mg4 <- frts_15yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M,
-#' m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
-#' weights = FACTOR, data = enadid_2014)
+#' mg4 <- frts_15yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A,
+#'  age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, wmn.dummy=MUJER, id.wmn=ID_1,
+#'  weights = FACTOR, data = enadid_2014)
 #'
 #' summary(mg4)
 #'
 #' @export
-summary.frts_15yrs <- function(x){
+summary.frts_15yrs <- function(object, ...){
 
-  rgp <- x$gqb/x$gqe
+  rgp <- object$gqb/object$gqe
 
   m1 <- c(mean(rgp[7, 13:14]), mean(rgp[7, 12:13]), mean(rgp[7, 11:12]))
   m2 <- c(mean(rgp[6, 13:14]), mean(rgp[6, 12:13]), mean(rgp[6, 11:12]), mean(rgp[6, 10:11 ]), mean(rgp[6, 9:10]), mean(rgp[6, 8:9]), mean(rgp[6, 7:8]), mean(rgp[6, 6:7]))
 
 
-  est1 <- c(rgp[7, 11],rep(sd(m1),10))
+  est1 <- c(rgp[7, 11],rep(stats::sd(m1),10))
   est1 <- rev(cumsum(est1))
-  est2 <- c(rgp[6, 6],rep(sd(m2),5))
+  est2 <- c(rgp[6, 6],rep(stats::sd(m2),5))
   est2 <- rev(cumsum(est2))
 
   rgp[7, 1:11] <- est1
@@ -347,13 +351,13 @@ summary.frts_15yrs <- function(x){
 
   rts_dis <- matrix(0, nrow = 35, ncol = 14)
 
-  for(j in (x$y.intvw-14):(x$y.intvw-1)){
+  for(j in (object$y.intvw-14):(object$y.intvw-1)){
     for(i in 15:49){
-      rts_dis[i-14,j-(x$y.intvw-15)] <- disaggregate(auxFX(VX2(i, j, rgp), j, rgp), auxFX(VX2(i+1, j, rgp), j, rgp))
+      rts_dis[i-14,j-(object$y.intvw-15)] <- disaggregate(auxFX(VX2(i, j, rgp), j, rgp), auxFX(VX2(i+1, j, rgp), j, rgp))
     }
   }
 
-  as_frs <- x$birth/x$expo
+  as_frs <- object$birth/object$expo
   as_frs <- as_frs[1:35, ]
 
   for(i in 1:10){

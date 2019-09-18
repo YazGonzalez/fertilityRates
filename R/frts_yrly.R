@@ -12,8 +12,6 @@
 #' @param age.wmn A vector specifying the woman's age at the time of the interview (mother or not mother).
 #' @param m.child A vector specifying the child’s month of birth (if the woman doesn't have child, NA).
 #' @param y.child A vector specifying the child’s year of birth (if the woman doesn't have children, NA).
-#' @param children A vector which indicate the number of children.
-#' @param child.dummy A vector which indicate 0 if the woman doesn't have a child or 1 if the woman has a child.
 #' @param wmn.dummy A vector which indicate TRUE if the woman isn't duplicate or FALSE if the woman is duplicate.
 #' @param id.wmn A vector wich indicate the woman's identification.
 #' @param ids A vector specifying cluster ids from largest level to smallest level.
@@ -27,9 +25,10 @@
 #'
 #' ## Information from ENADID 2014, INEGI
 #'
-#' mg2 <- frts_yrly(m.intvw=ENTREV_M, y.intvw=2014, y.ref=2012, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M,
-#' y.child=FEC_HIJ_A, children=NUM_HIJ, child.dummy=CONT,wmn.dummy=MUJER, id.wmn=ID_1,
-#' ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
+#' mg2 <- frts_yrly(m.intvw=ENTREV_M, y.intvw=2014, y.ref=2012, m.wmn=FEC_MUJ_M,
+#'  y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A,
+#'  wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO, weights = FACTOR,
+#'  data = enadid_2014)
 #'
 #' summary(mg2, level = 0.9)
 #'
@@ -37,17 +36,18 @@
 #'
 
 frts_yrly<- function(m.intvw, y.intvw, y.ref, m.wmn, y.wmn, age.wmn,
-                      m.child, y.child, children,
-                      child.dummy, wmn.dummy, id.wmn, ids,
+                      m.child, y.child,
+                      wmn.dummy, id.wmn, ids,
                       strata, weights, data){
   if(is.data.frame(data)){
     if (requireNamespace("survey", quietly = TRUE)) {
-      if (!("package:survey" %in% search())) library ("survey")
+
       attach(data)
       database <- data.frame(m.wmn, y.wmn,
                              m.child, y.child,
-                             children, child.dummy,
                              wmn.dummy, id.wmn)
+
+      database$child.dummy <- ifelse(is.na(y.child)==FALSE, 1, 0)
 
 
       intvw.age  <-  ifelse(m.wmn >= m.intvw, age.wmn,  age.wmn-1)
@@ -114,7 +114,7 @@ frts_yrly<- function(m.intvw, y.intvw, y.ref, m.wmn, y.wmn, age.wmn,
               }
             }
             else{
-              age = c(age, intvw.age[i]-(y.intvw-y.child[i])+rbinom(1,1,0.5))
+              age = c(age, intvw.age[i]-(y.intvw-y.child[i])+stats::rbinom(1,1,0.5))
             }
           }
           else{age = c(age,0)}
@@ -147,7 +147,7 @@ frts_yrly<- function(m.intvw, y.intvw, y.ref, m.wmn, y.wmn, age.wmn,
       attach(database)
 
 
-      ds <- svydesign(id = ~ids,
+      ds <- survey::svydesign(id = ~ids,
                       strata = ~strata,
                       weights = ~weights,
                       data = database, nest=TRUE)

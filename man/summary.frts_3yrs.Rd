@@ -4,12 +4,14 @@
 \alias{summary.frts_3yrs}
 \title{Summarize the data of last five years to three-year periods in fertility rates}
 \usage{
-\method{summary}{frts_3yrs}(x, level)
+\method{summary}{frts_3yrs}(object, level, ...)
 }
 \arguments{
-\item{x}{An object of class "frts_3yrs".}
+\item{object}{An object of class "frts_3yrs".}
 
 \item{level}{The confidence level required to confidence intervals for fertility rates.}
+
+\item{...}{Additional arguments affecting the summary produced.}
 }
 \value{
 An object of class list. The elements of this are "as_fr_s", "t_fr" and "as_fr_g".
@@ -23,7 +25,7 @@ by single year of age and grouped year of age, and total fertility rate.
 ## Information from ENADID 2014, INEGI
 
 mg3 <- frts_3yrs(m.intvw=ENTREV_M , y.intvw=2014, y.first=2013, y.second=2012, y.third=2011,
- m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, child.dummy=CONT,
+ m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A,
  wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
 
 summary(mg3, level = 0.9)
