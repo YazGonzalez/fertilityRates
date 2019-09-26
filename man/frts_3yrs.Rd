@@ -32,7 +32,7 @@ frts_3yrs(m.intvw, y.intvw, y.first, y.second, y.third, m.wmn, y.wmn,
 
 \item{id.wmn}{A vector wich indicate the woman's identification.}
 
-\item{ids}{A vector specifying cluster ids from largest level to smallest level.}
+\item{ids}{A vector specifying cluster ids from largest level to smallest level, ~0 or ~1 is a formula for no clusters.}
 
 \item{strata}{A vector specifying strata.}
 

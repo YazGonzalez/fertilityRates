@@ -24,9 +24,9 @@ by single year of age and grouped year of age, and total fertility rate.
 
 ## Information from ENADID 2014, INEGI
 
-mg1 <- frts_intvw(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A, age.wmn=EDAD_M, m.child=FEC_HIJ_M,
- y.child=FEC_HIJ_A, wmn.dummy=MUJER, id.wmn=ID_1, ids=UPM, strata=ESTRATO,
- weights = FACTOR, data = enadid_2014)
+mg1 <- frts_intvw(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A,
+ age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, wmn.dummy=MUJER, id.wmn=ID_1,
+ ids=UPM, strata=ESTRATO, weights = FACTOR, data = enadid_2014)
 
 summary(mg1, level = 0.9)
 

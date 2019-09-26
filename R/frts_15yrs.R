@@ -36,11 +36,11 @@ frts_15yrs<- function(m.intvw, y.intvw, m.wmn,
   if(is.data.frame(data)){
 
       attach(data)
-      database <- data.frame(m.wmn, y.wmn,
+      db <- data.frame(m.wmn, y.wmn,
                              m.child, y.child,
                              wmn.dummy, id.wmn, weights)
 
-      database$child.dummy <- ifelse(is.na(y.child)==FALSE, 1, 0)
+      db$child.dummy <- ifelse(is.na(y.child)==FALSE, 1, 0)
 
       intvw.age  <-  ifelse(m.wmn >= m.intvw, age.wmn,  age.wmn-1)
       age.wmn <- NULL
@@ -50,23 +50,23 @@ frts_15yrs<- function(m.intvw, y.intvw, m.wmn,
       age2.wmn <- age.wmn + 1
 
 
-      database$age.wmn <- age.wmn
-      database$age2.wmn <- age2.wmn
-      database$intvw.age <- intvw.age
-      database$expo1 <- 0
-      database$expo2 <- 0
+      db$age.wmn <- age.wmn
+      db$age2.wmn <- age2.wmn
+      db$intvw.age <- intvw.age
+      db$expo1 <- 0
+      db$expo2 <- 0
 
-      for (i in 1:dim(database)[1]) {
+      for (i in 1:dim(db)[1]) {
 
-        if(database$wmn.dummy[i]==TRUE){
-          database$expo1[i] <- ((database$m.wmn[i]-0.5)/12)
-          database$expo2[i] <- (1-database$expo1[i])
+        if(db$wmn.dummy[i]==TRUE){
+          db$expo1[i] <- ((db$m.wmn[i]-0.5)/12)
+          db$expo2[i] <- (1-db$expo1[i])
         }
 
       }
 
-      database$expo1 <- database$expo1 * database$weights
-      database$expo2 <- database$expo2 * database$weights
+      db$expo1 <- db$expo1 * db$weights
+      db$expo2 <- db$expo2 * db$weights
 
 
       auxiliary <- function(age, age.wmn, age2.wmn, exposition1, exposition2){
@@ -86,7 +86,7 @@ frts_15yrs<- function(m.intvw, y.intvw, m.wmn,
 
 
       for (i in c(15:54)) {
-        exposition[i-14,14] <- auxiliary(i, database$age.wmn, database$age2.wmn, database$expo1, database$expo2)
+        exposition[i-14,14] <- auxiliary(i, db$age.wmn, db$age2.wmn, db$expo1, db$expo2)
       }
 
       for(i in 40:1){
@@ -95,8 +95,8 @@ frts_15yrs<- function(m.intvw, y.intvw, m.wmn,
         }
       }
 
-      database$expo1 <- NULL
-      database$expo2 <- NULL
+      db$expo1 <- NULL
+      db$expo2 <- NULL
 
       gqe<-as.matrix(rbind(apply(exposition[c(1:5),c(1:14)],2,sum),
                                     apply(exposition[c(6:10),c(1:14)],2,sum),
@@ -129,7 +129,7 @@ frts_15yrs<- function(m.intvw, y.intvw, m.wmn,
       }
 
 
-      database$age.mother <- estimate_age(database$m.child, database$y.child, database$m.wmn, database$intvw.age, y.intvw)
+      db$age.mother <- estimate_age(db$m.child, db$y.child, db$m.wmn, db$intvw.age, y.intvw)
 
       auxiliary_2 <- function(date, age, data){
         aux <- grep(date, data[ ,'y.child'],value=FALSE)
@@ -152,7 +152,7 @@ frts_15yrs<- function(m.intvw, y.intvw, m.wmn,
 
         for (i in c(15:54)) {
 
-          birth[i-14, j-(y.intvw - 15)]<- auxiliary_2(j, i, database)
+          birth[i-14, j-(y.intvw - 15)]<- auxiliary_2(j, i, db)
         }
       }
 
