@@ -1,4 +1,4 @@
-#' Apply fertility rates methodology for last five years to three-year periods
+#' Apply fertility rates methodology for last four years to three-year periods
 #'
 #' Applies a given fertility rates methodology rates
 #' case-by-case to a data set and returns another data set

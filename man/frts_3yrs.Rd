@@ -2,7 +2,7 @@
 % Please edit documentation in R/frts_3yrs.R
 \name{frts_3yrs}
 \alias{frts_3yrs}
-\title{Apply fertility rates methodology for last five years to three-year periods}
+\title{Apply fertility rates methodology for last four years to three-year periods}
 \usage{
 frts_3yrs(m.intvw, y.intvw, y.first, y.second, y.third, m.wmn, y.wmn,
   age.wmn, m.child, y.child, wmn.dummy, id.wmn, ids, strata, weights, data)

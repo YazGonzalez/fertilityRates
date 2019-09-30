@@ -1,4 +1,4 @@
-#' Apply fertility rates methodology for last complete years up to five years
+#' Apply fertility rates methodology for last complete years up to four years
 #'
 #' Applies a given fertility rates methodology rates
 #' case-by-case to a data set and returns another data set
@@ -6,7 +6,7 @@
 #'
 #' @param m.intvw A numeric or a vector which indicates the month in which the woman were interviewed.
 #' @param y.intvw A numeric which indicate the year in which the woman were interviewed.
-#' @param y.ref A numeric which indicate the reference year. It must be between last five years above interview.
+#' @param y.ref A numeric which indicate the reference year. It must be between last four years above interview.
 #' @param m.wmn A vector specifying the woman’s month of birth (mother or not mother).
 #' @param y.wmn A vector specifying the woman’s year of birth (mother or not mother).
 #' @param age.wmn A vector specifying the woman's age at the time of the interview (mother or not mother).

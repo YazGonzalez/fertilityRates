@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.R
 \name{summary.frts_yrly}
 \alias{summary.frts_yrly}
-\title{Summarize the data of last complete years up to five years in fertility rates}
+\title{Summarize the data of last complete years up to four years in fertility rates}
 \usage{
 \method{summary}{frts_yrly}(object, level, ...)
 }
@@ -17,7 +17,7 @@
 An object of class list. The elements of this are "as_fr_s", "t_fr" and "as_fr_g".
 }
 \description{
-Summarize the data of last complete years up to five years in age-specific fertility rates
+Summarize the data of last complete years up to four years in age-specific fertility rates
 by single year of age and grouped year of age, and total fertility rate.
 }
 \examples{

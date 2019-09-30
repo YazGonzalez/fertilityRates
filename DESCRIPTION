@@ -7,8 +7,8 @@ Maintainer: Yazmin González <ybgm@outlook.com>
 Description: This is an R package to do point estimates and confidence 
     intervals of age-specific fertility rates by single years of age and grouped year of age,
     and total fertility rates, for annual or three-year periods that fall 
-    within five years prior to the date of survey. In addition, point estimates 
-    of the aforementioned fertility measures for the last fifteen-year prior to the survey. 
+    within four years prior to the date of survey. In addition, point estimates 
+    of the aforementioned fertility measures for the last fourteen-year prior to the survey. 
     The fertilityRates package uses Tom A Moultrie's methodology "Direct estimation of fertility 
     from survey data containing birth histories." in Tools for Demographic Estimation, with a small change in 
     the calculation of the age of each woman at the start of the year in which she was interviewed Working.

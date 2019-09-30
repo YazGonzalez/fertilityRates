@@ -1,4 +1,4 @@
-#' Apply fertility rates methodology for last fifteen-years to annual periods
+#' Apply fertility rates methodology for last fourteen-years to annual periods
 #'
 #' Applies a given fertility rates methodology rates
 #' case-by-case to a data set and returns a list with the estimates by year.
@@ -15,13 +15,13 @@
 #' @param weights A vetor pecifying sampling weights as an alternative to prob (1/weights).
 #' @param data A data frame containing the above variables.
 #'
-#' @return An object of class frts_15yrs containing four arrays and a numeric.
+#' @return An object of class frts_14yrs containing four arrays and a numeric.
 #'
 #' @examples
 #'
 #' ## Information from ENADID 2014, INEGI
 #'
-#' mg4 <- frts_15yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A,
+#' mg4 <- frts_14yrs(m.intvw=ENTREV_M, y.intvw=2014, m.wmn=FEC_MUJ_M, y.wmn=FEC_MUJ_A,
 #'  age.wmn=EDAD_M, m.child=FEC_HIJ_M, y.child=FEC_HIJ_A, wmn.dummy=MUJER, id.wmn=ID_1,
 #'  weights = FACTOR, data = enadid_2014)
 #'
@@ -29,7 +29,7 @@
 #'
 #' @export
 #'
-frts_15yrs<- function(m.intvw, y.intvw, m.wmn,
+frts_14yrs<- function(m.intvw, y.intvw, m.wmn,
                      y.wmn, age.wmn, m.child, y.child,
                      wmn.dummy, id.wmn,
                      weights, data){
@@ -167,7 +167,7 @@ frts_15yrs<- function(m.intvw, y.intvw, m.wmn,
 
       value <- list(expo = exposition, birth = birth, gqe = gqe, gqb = gqb, y.intvw = y.intvw)
 
-      attr(value, 'class') <- 'frts_15yrs'
+      attr(value, 'class') <- 'frts_14yrs'
       value
 
 

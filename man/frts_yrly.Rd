@@ -2,7 +2,7 @@
 % Please edit documentation in R/frts_yrly.R
 \name{frts_yrly}
 \alias{frts_yrly}
-\title{Apply fertility rates methodology for last complete years up to five years}
+\title{Apply fertility rates methodology for last complete years up to four years}
 \usage{
 frts_yrly(m.intvw, y.intvw, y.ref, m.wmn, y.wmn, age.wmn, m.child, y.child,
   wmn.dummy, id.wmn, ids, strata, weights, data)
@@ -12,7 +12,7 @@ frts_yrly(m.intvw, y.intvw, y.ref, m.wmn, y.wmn, age.wmn, m.child, y.child,
 
 \item{y.intvw}{A numeric which indicate the year in which the woman were interviewed.}
 
-\item{y.ref}{A numeric which indicate the reference year. It must be between last five years above interview.}
+\item{y.ref}{A numeric which indicate the reference year. It must be between last four years above interview.}
 
 \item{m.wmn}{A vector specifying the woman’s month of birth (mother or not mother).}
 
