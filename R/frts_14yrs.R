@@ -78,7 +78,7 @@ frts_14yrs<- function(m.intvw, y.intvw, m.wmn,
         return(val)
       }
 
-      exposition <- matrix(rep(0,560), nrow = 40, byrow = T )
+      exposition <- matrix(rep(0, 560), nrow = 40, byrow = T )
       temp <- (y.intvw - 14):(y.intvw - 1)
       colnames(exposition) <- as.character(temp)
       temp2 <- 15:54
@@ -98,7 +98,7 @@ frts_14yrs<- function(m.intvw, y.intvw, m.wmn,
       db$expo1 <- NULL
       db$expo2 <- NULL
 
-      gqe<-as.matrix(rbind(apply(exposition[c(1:5),c(1:14)],2,sum),
+      gqe <- as.matrix(rbind(apply(exposition[c(1:5),c(1:14)],2,sum),
                                     apply(exposition[c(6:10),c(1:14)],2,sum),
                                     apply(exposition[c(11:15),c(1:14)],2,sum),
                                     apply(exposition[c(16:20),c(1:14)],2,sum),
@@ -132,7 +132,7 @@ frts_14yrs<- function(m.intvw, y.intvw, m.wmn,
       db$age.mother <- estimate_age(db$m.child, db$y.child, db$m.wmn, db$intvw.age, y.intvw)
 
       auxiliary_2 <- function(date, age, data){
-        aux <- grep(date, data[ ,'y.child'],value=FALSE)
+        aux <- grep(date, data[ ,'y.child'], value=FALSE)
         aux2 <- data[aux, c('weights', 'age.mother')]
         aux3<-grep(age,aux2[,2],value=FALSE)
         aux4<-aux2[aux3,1:2]
@@ -141,7 +141,7 @@ frts_14yrs<- function(m.intvw, y.intvw, m.wmn,
       }
 
 
-      birth <- matrix(rep(0,560),nrow = 40, byrow = T )
+      birth <- matrix(rep(0,560), nrow = 40, byrow = T )
       temp <- (y.intvw - 14):(y.intvw - 1)
       colnames(birth) <- as.character(temp)
       temp2 <- 15:54

@@ -289,17 +289,16 @@ summary.frts_14yrs <- function(object, ...){
 
   rgp <- object$gqb/object$gqe
 
-  m1 <- c(mean(rgp[7, 13:14]), mean(rgp[7, 12:13]), mean(rgp[7, 11:12]))
-  m2 <- c(mean(rgp[6, 13:14]), mean(rgp[6, 12:13]), mean(rgp[6, 11:12]), mean(rgp[6, 10:11 ]), mean(rgp[6, 9:10]), mean(rgp[6, 8:9]), mean(rgp[6, 7:8]), mean(rgp[6, 6:7]))
+  mde_A <- mean(rgp[6, 6:14])
+  sde_A <- stats::sd(rgp[6, 6:14])
+  A <- stats::rnorm(5, mde_A, sde_A)
+  rgp[6, 1:5] <- abs(A)
 
+  mde_B <- mean(rgp[7, 11:14])
+  sde_B <- stats::sd(rgp[7, 11:14])
+  B <- stats::rnorm(10, mde_B, sde_B)
+  rgp[7, 1:10] <- abs(B)
 
-  est1 <- c(rgp[7, 11],rep(stats::sd(m1),10))
-  est1 <- rev(cumsum(est1))
-  est2 <- c(rgp[6, 6],rep(stats::sd(m2),5))
-  est2 <- rev(cumsum(est2))
-
-  rgp[7, 1:11] <- est1
-  rgp[6, 1:6] <- est2
   row.names(rgp) <- c('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49')
 
 
@@ -317,15 +316,14 @@ summary.frts_14yrs <- function(object, ...){
   }
 
 
-  TGFQ <- function(year,db){
+  TGFQ <- function(year, db){
     rtsg <- db[,(dimnames(db)[[2]]==as.character(year))]
     tgf <- 5*sum(rtsg)
     return(tgf)
   }
 
 
-
-  VX1 <- function(fx,tgf){
+  VX1 <- function(fx, tgf){
     vx1 <- log(-log( fx/tgf ))
     return(vx1)
   }
@@ -345,7 +343,7 @@ summary.frts_14yrs <- function(object, ...){
 
 
   disaggregate <- function(auxfx1,auxfx2){
-    f1x1 <- auxfx2-auxfx1 #la tasa corresponde al a??o de auxfx1
+    f1x1 <- auxfx2-auxfx1 #la tasa corresponde al anio de auxfx1
     return(f1x1)
   }
 
@@ -373,8 +371,11 @@ summary.frts_14yrs <- function(object, ...){
     as_frs[(which(is.na(as_frs[,i])==T)),i] <- rts_dis[(which(is.na(as_frs[,i])==T)),i]
   }
 
+
+
   t_frs <- apply(as_frs, 2, sum)
   t_frs <- as.data.frame(t_frs)
+
 
 
   value <- list(as_fr_s = round(as_frs, 3), t_frs = round(t_frs, 3), as_fr_g = round(rgp,3))
