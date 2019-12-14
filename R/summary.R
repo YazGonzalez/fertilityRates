@@ -22,6 +22,7 @@
 #' @export
 summary.frts_intvw <- function(object, level, ...){
   if (requireNamespace("survey", quietly = TRUE)) {
+    options(survey.ultimate.cluster=TRUE)
 
   val <- c()
   i_ci <- c()
@@ -110,6 +111,7 @@ summary.frts_intvw <- function(object, level, ...){
 #' @export
 summary.frts_yrly <- function(object, level, ...){
   if (requireNamespace("survey", quietly = TRUE)) {
+    options(survey.ultimate.cluster=TRUE)
 
 
   val <- c()
@@ -199,6 +201,7 @@ summary.frts_yrly <- function(object, level, ...){
 #' @export
 summary.frts_3yrs <- function(object,  level, ...){
   if (requireNamespace("survey", quietly = TRUE)) {
+    options(survey.ultimate.cluster=TRUE)
 
 
   val <- c()

@@ -4,12 +4,13 @@
 library(foreign)
 library(dplyr)
 
-setwd('F:/Proyecto Fecundidad/ENADID/14/BASESDBF')
-
 # read the dbf files
-muj_14 <- read.dbf('TMMujer1.dbf')
-hist_14 <- read.dbf('TFec_Hemb.dbf')
-
+temporal <- tempfile()
+download.file("http://www.inegi.org.mx/contenidos/programas/enadid/2014/microdatos/base_datos_enadid14_dbf.zip",temporal)
+files = unzip(temporal, list=TRUE)$Name
+unzip(temporal, files=files[grepl("dbf",files)])
+muj_14 <- data.frame(read.dbf("TMMujer1.dbf"))
+hist_14 <- data.frame(read.dbf('TFec_Hemb.dbf'))
 
 # delete the abortion and stillbirth s's registro
 hist_14 <- hist_14[which(is.na(hist_14[,'P5_20'])==T &  is.na(hist_14[,"P5_24"])==T), ]
