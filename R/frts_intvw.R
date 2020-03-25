@@ -74,7 +74,12 @@ frts_intvw<- function(m.intvw, y.intvw, m.wmn,
         }
 
       }
-      db$m.intvw <- NULL
+
+      # special databases
+
+      DATSN <- data.frame(YCHILD = db$y.child , DUM = db$child.dummy)
+      DATSD <- data.frame(EXPOT = c(db$expo1, db$expo2, db$expo3),
+                          AGEW = c(db$age.wmn , db$age2.wmn, db$age.wmn))
 
 
       auxiliary <- function(age, age.wmn, age2.wmn, exposition1, exposition2, exposition3){
@@ -97,11 +102,6 @@ frts_intvw<- function(m.intvw, y.intvw, m.wmn,
         data[,j]<- auxiliary(j+15-1, db$age.wmn, db$age2.wmn, db$expo1,
                              db$expo2, db$expo3)
       }
-
-
-      db$expo1 <- NULL
-      db$expo2 <- NULL
-      db$expo3 <- NULL
 
       db <- cbind(db,data)
 
@@ -142,21 +142,96 @@ frts_intvw<- function(m.intvw, y.intvw, m.wmn,
       db$y.wmn <- NULL
       db$m.child <- NULL
 
+      DATSN <- cbind(DATSN, AGEM = db$age.mother)
 
-      db$ids <- ids
-      db$strata <- strata
-      db$weights <- weights
+      bandera <- NULL
+      if(length(ids) > 2){
+        db$ids <- ids
+        bandera <- TRUE
+        db$strata <- strata
+        db$weights <- weights
 
-      detach(data)
-      attach(db)
+        detach(data)
+        attach(db)
+        ds <- survey::svydesign(id = ~ids,
+                                strata = ~strata,
+                                weights = ~weights,
+                                data = db, nest=TRUE)
+
+        DATSN <- cbind(DATSN, CLUS = db$ids, WEIG = db$weights)
+        A <- length(unique(DATSN$CLUS))
+        DATSD <- cbind(DATSD, CLUS2 = c(db$ids, db$ids, db$ids),
+                       WEIG2 = c(db$weights, db$weights, db$weights))
+
+        DATSN <- DATSN[which(DATSN$YCHILD == y.intvw), -1]
+        DATSN <- DATSN[which(DATSN$AGEM >= 15 & DATSN$AGEM <= 49), ]
+        numJ <- matrix(15:49, byrow = TRUE)
+        DATSD <- DATSD[which(DATSD$AGEW >=15 & DATSD$AGEW <= 49), ]
+        DATSD <- DATSD[which(DATSD$EXPOT > 0), ]
+        denJ <- matrix(15:49, byrow = TRUE)
+
+        for (i in unique(DATSN$CLUS)){
+          dbJ <- DATSN[which(!DATSN$CLUS == i), ]
+          num <- stats::aggregate(dbJ$DUM * dbJ$WEIG, list(dbJ$AGEM), sum)$x
+          numJ <- cbind(numJ, num)
+          dbJ <- DATSD[which(!DATSD$CLUS2 == i), ]
+          den <- stats::aggregate(dbJ$EXPOT * dbJ$WEIG2, list(dbJ$AGEW), sum)$x
+          denJ <- cbind(denJ, den)
+
+        }
+
+        tgfa <- apply(numJ[ , -1]/denJ[ , -1], 2, sum)
+
+        } else {
+        bandera <- FALSE
+        db$strata <- strata
+        db$weights <- weights
+
+        detach(data)
+        attach(db)
+        ds <- survey::svydesign(id = ~1,
+                                strata = ~strata,
+                                weights = ~weights,
+                                data = db, nest=TRUE)
+
+        DATSN <- cbind(DATSN, WEIG = db$weights, IDT = db$id.wmn)
+        IDT <- unique(db$id.wmn)
+        clst <- data.frame(IDT, CLUS = round(stats::runif(length(IDT), 1,
+                                                   round(length(IDT)/15, 0)), 0))
+        rm(IDT)
+        DATSN <- merge(DATSN, clst, by = 'IDT')
+        rm(clst)
+        A <- length(unique(DATSN$CLUS))
+        DATSD <- cbind(DATSD, WEIG2 = c(db$weights, db$weights, db$weights),
+                       CLUS2 = c(DATSN$CLUS, DATSN$CLUS, DATSN$CLUS))
 
 
-      ds <- survey::svydesign(id = ~ids,
-                      strata = ~strata,
-                      weights = ~weights,
-                      data = db, nest=TRUE) #JUST NEST
+        DATSN <- DATSN[which(DATSN$YCHILD == y.intvw), -1]
+        DATSN <- DATSN[which(DATSN$AGEM >= 15 & DATSN$AGEM <= 49), ]
+        numJ <- matrix(15:49, byrow = TRUE)
+        DATSD <- DATSD[which(DATSD$AGEW >=15 & DATSD$AGEW <=49), ]
+        DATSD <- DATSD[which(DATSD$EXPOT > 0), ]
+        denJ <- matrix(15:49, byrow = TRUE)
 
-      value <- list(df = db, ds = ds)
+        for (i in unique(DATSN$CLUS)){
+          dbJ <- DATSN[which(!DATSN$CLUS == i), ]
+          dbM <- DATSD[which(!DATSD$CLUS2 == i), ]
+          num <- stats::aggregate(dbJ$DUM * dbJ$WEIG, list(dbJ$AGEM), sum)$x
+          numJ <- cbind(numJ, num)
+
+          den <- stats::aggregate(dbM$EXPOT * dbM$WEIG2, list(dbM$AGEW), sum)$x
+          denJ <- cbind(denJ, den)
+
+        }
+
+        tgfa <- apply(numJ[ , -1]/denJ[ , -1], 2, sum)
+        }
+
+        rm(dbJ, DATSN, DATSD)
+
+
+
+      value <- list(df = db, ds = ds, ta = tgfa, a = A, flag = bandera)
 
       attr(value, 'class') <- 'frts_intvw'
       value

@@ -22,7 +22,9 @@
 #' @export
 summary.frts_intvw <- function(object, level, ...){
   if (requireNamespace("survey", quietly = TRUE)) {
-    options(survey.ultimate.cluster=TRUE)
+    if(object$flag == TRUE){
+      options(survey.ultimate.cluster=TRUE)
+      options(survey.lonely.psu="adjust")}
 
   val <- c()
   i_ci <- c()
@@ -40,17 +42,22 @@ summary.frts_intvw <- function(object, level, ...){
     variance <- c(variance,rate$var[2])
   }
 
-  as_fr <- data.frame(round(val, 3), round(i_ci, 3), round(u_ci, 3), variance)
+  as_fr <- data.frame(round(val, 4), round(i_ci, 4), round(u_ci, 4), variance)
   names(as_fr) <- c('as_fr_s','l_ci','u_ci','var')
   row.names(as_fr) <- 15:49
 
 
   rate <- apply(as_fr,2,sum)[1]
-  se <- sqrt(apply(as_fr,2,sum)[4])
   a <- (1 - level)
-  t_fr <- round(c(rate, rate + stats::qt(a/2, df=survey::degf(object$ds)) * se, rate + stats::qt(1-a/2, df=survey::degf(object$ds)) * se), 3)
-  names(t_fr) <- c('t_fr','l_ci','u_ci')
-  t_fr <- as.data.frame(t_fr)
+  t_fr <- NULL
+
+
+   theta <- mean(object$ta)
+   JKvar <- ((object$a - 1)/(object$a)) * sum(( object$ta- theta)^2)
+   se <- sqrt(JKvar)
+   t_fr <- round(c(rate, rate - stats::qnorm(1-(a/2)) * se, rate + stats::qnorm(1-a/2) * se), 4)
+   names(t_fr) <- c('t_fr','l_ci','u_ci')
+   t_fr <- as.data.frame(t_fr)
 
 
   val2 <- c()
@@ -69,7 +76,7 @@ summary.frts_intvw <- function(object, level, ...){
 
   }
 
-  ag_fr <- data.frame(round(val2, 3), round(i_ci2, 3), round(u_ci2, 3))
+  ag_fr <- data.frame(round(val2, 4), round(i_ci2, 4), round(u_ci2, 4))
   names(ag_fr) <- c('as_fr_g','l_ci','u_ci')
   row.names(ag_fr) <- c('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49')
 
@@ -111,7 +118,9 @@ summary.frts_intvw <- function(object, level, ...){
 #' @export
 summary.frts_yrly <- function(object, level, ...){
   if (requireNamespace("survey", quietly = TRUE)) {
-    options(survey.ultimate.cluster=TRUE)
+    if(object$flag == TRUE){
+      options(survey.ultimate.cluster=TRUE)
+      options(survey.lonely.psu="adjust")}
 
 
   val <- c()
@@ -130,17 +139,22 @@ summary.frts_yrly <- function(object, level, ...){
     variance <- c(variance,rate$var[2])
 
   }
-  as_fr <- data.frame(round(val, 3), round(i_ci, 3), round(u_ci, 3), variance)
+  as_fr <- data.frame(round(val, 4), round(i_ci, 4), round(u_ci, 4), variance)
   names(as_fr) <- c('as_fr_s','l_ci','u_ci','var')
   row.names(as_fr) <- 15:49
 
 
   rate <- apply(as_fr,2,sum)[1]
-  se <- sqrt(apply(as_fr,2,sum)[4])
   a <- (1 - level)
-  t_fr <- round(c(rate, rate + stats::qt(a/2, df=survey::degf(object$ds)) * se, rate + stats::qt(1-a/2, df=survey::degf(object$ds)) * se), 3)
-  names(t_fr) <- c('t_fr','l_ci','u_ci')
-  t_fr <- as.data.frame(t_fr)
+  t_fr <- NULL
+
+
+    theta <- mean(object$ta)
+    JKvar <- ((object$a - 1)/(object$a)) * sum(( object$ta- theta)^2)
+    se <- sqrt(JKvar)
+    t_fr <- round(c(rate, rate - stats::qnorm(1-(a/2)) * se, rate + stats::qnorm(1-a/2) * se), 4)
+    names(t_fr) <- c('t_fr','l_ci','u_ci')
+    t_fr <- as.data.frame(t_fr)
 
 
   val2 <- c()
@@ -159,11 +173,9 @@ summary.frts_yrly <- function(object, level, ...){
 
 
   }
-  ag_fr <- data.frame(round(val2, 3), round(i_ci2, 3), round(u_ci2, 3))
+  ag_fr <- data.frame(round(val2, 4), round(i_ci2, 4), round(u_ci2, 4))
   names(ag_fr) <- c('as_fr_g','l_ci','u_ci')
   row.names(ag_fr) <- c('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49')
-
-
   as_fr$var <- NULL
 
 
@@ -201,7 +213,9 @@ summary.frts_yrly <- function(object, level, ...){
 #' @export
 summary.frts_3yrs <- function(object,  level, ...){
   if (requireNamespace("survey", quietly = TRUE)) {
-    options(survey.ultimate.cluster=TRUE)
+    if(object$flag == TRUE){
+      options(survey.ultimate.cluster=TRUE)
+      options(survey.lonely.psu="adjust")}
 
 
   val <- c()
@@ -221,17 +235,21 @@ summary.frts_3yrs <- function(object,  level, ...){
     variance <- c(variance,rate$var[2])
 
   }
-  as_fr <- data.frame(round(val, 3), round(i_ci, 3), round(u_ci, 3), variance)
+  as_fr <- data.frame(round(val, 4), round(i_ci, 4), round(u_ci, 4), variance)
   names(as_fr) <- c('as_fr_s','l_ci','u_ci','var')
   row.names(as_fr) <- 15:49
 
 
   rate <- apply(as_fr,2,sum)[1]
-  se <- sqrt(apply(as_fr,2,sum)[4])
   a <- (1 - level)
-  t_fr <- round(c(rate, rate + stats::qt(a/2, df=survey::degf(object$ds)) * se, rate + stats::qt(1-a/2, df=survey::degf(object$ds)) * se), 3)
-  names(t_fr) <- c('t_fr','l_ci','u_ci')
-  t_fr <- as.data.frame(t_fr)
+  t_fr <- NULL
+
+    theta <- mean(object$ta)
+    JKvar <- ((object$a - 1)/(object$a)) * sum(( object$ta- theta)^2)
+    se <- sqrt(JKvar)
+    t_fr <- round(c(rate, rate - stats::qnorm(1-(a/2)) * se, rate + stats::qnorm(1-a/2) * se), 4)
+    names(t_fr) <- c('t_fr','l_ci','u_ci')
+    t_fr <- as.data.frame(t_fr)
 
 
   val2 <- c()
@@ -251,7 +269,7 @@ summary.frts_3yrs <- function(object,  level, ...){
 
 
   }
-  ag_fr <- data.frame(round(val2, 3), round(i_ci2, 3), round(u_ci2, 3))
+  ag_fr <- data.frame(round(val2, 4), round(i_ci2, 4), round(u_ci2, 4))
   names(ag_fr) <- c('as_fr_g','l_ci','u_ci')
   row.names(ag_fr) <- c('15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49')
 
@@ -333,8 +351,12 @@ summary.frts_14yrs <- function(object, ...){
 
 
   VX2 <- function(y, year, db){
-    m <- ((VX1(FX(35, year, db), TGFQ(year, db)) + VX1(FX(40, year, db), TGFQ(year, db)) + VX1(FX(45, year, db), TGFQ(year, db))- VX1(FX(20, year, db),TGFQ(year, db))- VX1(FX(25, year, db), TGFQ(year, db))-VX1(FX(30, year, db), TGFQ(year, db)))/3)/15
-    vx2 <- m*(y-25)+(VX1(FX(20, year, db),TGFQ(year, db)) + VX1(FX(25, year, db), TGFQ(year, db)) + VX1(FX(30, year, db), TGFQ(year, db)))/3
+    m <- ((VX1(FX(35, year, db), TGFQ(year, db)) +
+             VX1(FX(40, year, db), TGFQ(year, db)) + VX1(FX(45, year, db), TGFQ(year, db))
+           - VX1(FX(20, year, db),TGFQ(year, db))- VX1(FX(25, year, db), TGFQ(year, db))
+           -VX1(FX(30, year, db), TGFQ(year, db)))/3)/15
+    vx2 <- m*(y-25)+(VX1(FX(20, year, db),TGFQ(year, db)) + VX1(FX(25, year, db), TGFQ(year, db))
+                     + VX1(FX(30, year, db), TGFQ(year, db)))/3
     return(vx2)
   }
 
@@ -354,7 +376,8 @@ summary.frts_14yrs <- function(object, ...){
 
   for(j in (object$y.intvw-14):(object$y.intvw-1)){
     for(i in 15:49){
-      rts_dis[i-14,j-(object$y.intvw-15)] <- disaggregate(auxFX(VX2(i, j, rgp), j, rgp), auxFX(VX2(i+1, j, rgp), j, rgp))
+      rts_dis[i-14,j-(object$y.intvw-15)] <- disaggregate(auxFX(VX2(i, j, rgp), j, rgp),
+                                                          auxFX(VX2(i+1, j, rgp), j, rgp))
     }
   }
 
@@ -381,7 +404,7 @@ summary.frts_14yrs <- function(object, ...){
 
 
 
-  value <- list(as_fr_s = round(as_frs, 3), t_frs = round(t_frs, 3), as_fr_g = round(rgp,3))
+  value <- list(as_fr_s = round(as_frs, 4), t_frs = round(t_frs, 4), as_fr_g = round(rgp,4))
   value
 
 }
